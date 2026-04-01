@@ -1,0 +1,78 @@
+{% extends 'base_minimal.html' %}
+{% block title %}Login - LearnHub{% endblock %}
+
+{% block content %}
+<main class="flex-grow flex items-center justify-center p-6 relative overflow-hidden">
+<!-- Background Architectural Elements -->
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] signature-texture opacity-5 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-tertiary-fixed opacity-10 rounded-full blur-[100px]"></div>
+<div class="w-full max-w-[480px] z-10">
+<!-- Brand Anchor -->
+<div class="mb-12 text-center">
+<h1 class="text-3xl font-black tracking-tighter text-primary mb-2">LearnHub</h1>
+<p class="text-on-surface-variant font-medium tracking-tight">The Illuminated Blueprint for Education.</p>
+</div>
+<!-- Login Card -->
+<div class="bg-surface-container-lowest p-8 md:p-12 rounded-lg ghost-border shadow-[0_32px_64px_-12px_rgba(25,27,35,0.04)]">
+<header class="mb-10">
+<h2 class="text-2xl font-bold text-on-surface tracking-tight mb-2">Welcome Back</h2>
+<p class="text-on-surface-variant text-sm">Please enter your credentials to access your academic studio.</p>
+</header>
+<form class="space-y-6">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="block text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant ml-1" for="email">
+                            Email Address
+                        </label>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-4 text-on-surface placeholder:text-outline/50 focus:ring-0 transition-all duration-300 peer" id="email" name="email" placeholder="name@university.edu" type="email"/>
+<div class="absolute bottom-0 left-0 h-[2px] w-0 bg-primary transition-all duration-300 peer-focus:w-full"></div>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<label class="block text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant ml-1" for="password">
+                                Password
+                            </label>
+<a class="text-[0.6875rem] font-bold text-primary hover:text-primary-container transition-colors uppercase tracking-widest" href="{% url 'accounts:password_reset' %}">Forgot?</a>
+</div>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-4 text-on-surface placeholder:text-outline/50 focus:ring-0 transition-all duration-300 peer" id="password" name="password" placeholder="••••••••" type="password"/>
+<div class="absolute bottom-0 left-0 h-[2px] w-0 bg-primary transition-all duration-300 peer-focus:w-full"></div>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-4">
+<button class="w-full signature-texture text-on-primary font-bold py-4 rounded-DEFAULT shadow-sm active:scale-[0.98] transition-all duration-200" type="submit">
+                            Login
+                        </button>
+</div>
+</form>
+<!-- Footer Link -->
+<div class="mt-10 text-center">
+<p class="text-on-surface-variant text-sm">
+                        Don't have an account? 
+                        <a class="text-primary font-bold hover:underline ml-1" href="{% url 'accounts:register' %}">Register</a>
+</p>
+</div>
+</div>
+<!-- Trust Badges / Social Login (Optional Scholarly Addition) -->
+<div class="mt-8 flex flex-col items-center gap-6">
+<div class="flex items-center gap-4 w-full">
+<div class="h-px flex-grow bg-outline-variant/30"></div>
+<span class="text-[0.6875rem] font-bold text-outline uppercase tracking-widest">Institutional Access</span>
+<div class="h-px flex-grow bg-outline-variant/30"></div>
+</div>
+<div class="flex gap-4">
+<button class="bg-surface-container-high hover:bg-surface-container-highest p-3 rounded-full transition-colors active:scale-95">
+<img alt="Google" class="w-5 h-5" data-alt="clean vector representation of the Google G logo with primary colors on a white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA32jCcxtcxxXsSl74iPZ6UIgWC-wDTPYXWvqWqKCIbtooym-akdFuK3EHp4gjGkEx9gEmOwjuRk1jBk59Lzganxdm-j2zYKDYtaaDNKQDbH0lu4lTOk_GyLDcnMs2oXAZY-t4T2EpFl-oyWILHyBGYwrGRx0Q4OV3tQHVw2vPsoS-jRFaozoYYPnSJMSWFPJ_5mXLMLjxgxsmFVBPc_On2Ogh8KNAAsSM9SN2bBX3YIgd0o4TdkMdAHCavLtljRs50jsEzy0V3_g"/>
+</button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest p-3 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="school">school</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+{% endblock %}
