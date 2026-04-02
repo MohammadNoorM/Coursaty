@@ -22,6 +22,8 @@ venv.bak/
 /media/
 /staticfiles/
 /static/
+data.json
+
 
 # IDEs and OS
 .vscode/

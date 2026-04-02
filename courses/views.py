@@ -1,18 +1,36 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Course, Lesson, Comment, Enrollment, Category
+from django.core.paginator import Paginator
+from django.db.models import Avg
+from .models import Course, Lesson, Comment, Enrollment, Category, Rating
+
+from django.contrib.auth import get_user_model
 
 def home_view(request):
     featured_courses = Course.objects.filter(is_published=True).order_by('-created_at')[:6]
     categories = Category.objects.all()
+    
+    course_count = Course.objects.filter(is_published=True).count()
+    lesson_count = Lesson.objects.filter(section__course__is_published=True).count()
+    learner_count = get_user_model().objects.filter(is_active=True).count()
+    
+    avg_rating = Rating.objects.aggregate(avg=Avg('score'))['avg']
+    success_rate = int((avg_rating / 5) * 100) if avg_rating else 100
+    
     return render(request, 'courses/home.html',
                   {'featured_courses': featured_courses,
-                   'categories': categories
+                   'categories': categories,
+                   'course_count': course_count,
+                   'lesson_count': lesson_count,
+                   'learner_count': learner_count,
+                   'success_rate': success_rate,
                    })
 
 def course_list_view(request):
-    courses = Course.objects.filter(is_published=True).order_by('-created_at')
+    courses = Course.objects.filter(is_published=True).annotate(
+        avg_rating=Avg('ratings__score')
+    ).order_by('-created_at')
     categories = Category.objects.all()
 
     category_slug = request.GET.get('category')
@@ -22,28 +40,65 @@ def course_list_view(request):
     search_query = request.GET.get('q')
     if search_query:
         courses = courses.filter(title__icontains=search_query)
+
+    min_rating = request.GET.get('rating')
+    if min_rating:
+        try:
+            min_val = float(min_rating)
+            if min_val > 0:
+                courses = courses.filter(avg_rating__gte=min_val)
+        except ValueError:
+            pass
+
+    sort_by = request.GET.get('sort')
+    if sort_by == 'newest':
+        courses = courses.order_by('-created_at')
+    elif sort_by == 'rating':
+        courses = courses.order_by('-avg_rating')
+    elif sort_by == 'price_low':
+        courses = courses.order_by('price')
+
+    paginator = Paginator(courses, 8) # 8 courses per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     
+    # Generate pagination range with ellipses for first/last pages
+    page_range = paginator.get_elided_page_range(number=page_obj.number, on_each_side=1, on_ends=1)
+
     return render(request, 'courses/course_list.html',
-                  {'courses': courses,
+                  {'courses': page_obj,
                    'categories': categories,
                    'selected_category': category_slug,
-                   'search_query': search_query
+                   'search_query': search_query,
+                   'min_rating': min_rating,
+                   'sort_by': sort_by,
+                   'page_obj': page_obj,
+                   'page_range': page_range
                    })
 
 def course_detail_view(request, slug):
-    course = get_object_or_404(Course, slug=slug, is_published=True)
+    course = get_object_or_404(
+        Course.objects.annotate(
+            avg_rating=Avg('ratings__score')
+        ),
+        slug=slug, 
+        is_published=True
+    )
     is_enrolled = False
     if request.user.is_authenticated:
         is_enrolled = Enrollment.objects.filter(user=request.user, course=course).exists()
+        
+    student_count = course.enrollments.count()
+    rating_count = course.ratings.count()
     
     # what_you_learn and requirements stored as line-separated text
     what_you_learn = [
-        line.strip() for line in course.what_you_learn.splitlines() 
+        line.strip().lstrip('- ') for line in course.what_you_learn.splitlines() 
         if line.strip()
-        ] if course.what_you_learn else []
+    ] if course.what_you_learn else []
     
     requirements = [
-        line.strip() for line in course.requirements.splitlines()
+        line.strip().lstrip('- ') for line in course.requirements.splitlines()
         if line.strip()
     ] if course.requirements else []
 
@@ -52,7 +107,9 @@ def course_detail_view(request, slug):
                   {'course': course,
                    'is_enrolled': is_enrolled,
                    'what_you_learn': what_you_learn,
-                   'requirements': requirements
+                   'requirements': requirements,
+                   'student_count': student_count,
+                   'rating_count': rating_count
                    })
 
 @login_required

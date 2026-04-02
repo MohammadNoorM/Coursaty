@@ -1,6 +1,12 @@
 from django.db import models
 from autoslug import AutoSlugField
+from autoslug.utils import slugify as default_slugify
 from django.conf import settings
+import re
+
+def custom_slugify(value):
+    value = re.sub(r'[^a-zA-Z0-9\s-]', '', value)
+    return default_slugify(value)
 
 
 class Category(models.Model):
@@ -24,7 +30,7 @@ class Course(models.Model):
     requirements = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     thumbnail = models.ImageField(upload_to='courses/thumbnails/')
-    slug = AutoSlugField(populate_from='title', unique=True)
+    slug = AutoSlugField(populate_from='title', unique=True, slugify=custom_slugify)
     is_published = models.BooleanField(default=False)
     last_updated = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)

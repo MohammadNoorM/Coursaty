@@ -13,7 +13,7 @@ def register_view(request):
             user = form.save()
             login(request, user)
             messages.success(request, 'Your account has been created successfully.')
-            return redirect('accounts:home')
+            return redirect('courses:home')
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
@@ -38,4 +38,4 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out.')
-    return redirect('accounts:login')
+    return redirect('courses:home')

@@ -9,27 +9,23 @@
 <!-- Headline & Header Info -->
 <div class="mb-12">
 <div class="flex items-center gap-2 mb-4">
-<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full text-[0.6875rem] font-bold tracking-wider uppercase">Architecture &amp; Design</span>
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full text-[0.6875rem] font-bold tracking-wider uppercase">{{ course.category.name }}</span>
 <span class="text-on-surface-variant text-sm">• Updated Oct 2024</span>
 </div>
 <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-6 leading-tight">
-                        Advanced Computational Design: The Future of Urban Blueprinting
+                        {{ course.title }}
                     </h1>
 <div class="flex flex-wrap items-center gap-6">
 <div class="flex items-center gap-2">
-<span class="text-lg font-bold text-tertiary">4.9</span>
+<span class="text-lg font-bold text-tertiary">{{ course.avg_rating|default:0.0|floatformat:1 }}</span>
 <div class="flex text-tertiary">
 <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star_half</span>
 </div>
-<span class="text-on-surface-variant text-sm">(12,450 ratings)</span>
+<span class="text-on-surface-variant text-sm">({{ rating_count }} rating{{ rating_count|pluralize }})</span>
 </div>
 <div class="flex items-center gap-2 text-on-surface-variant">
 <span class="material-symbols-outlined">group</span>
-<span class="text-sm font-medium">85,230 students enrolled</span>
+<span class="text-sm font-medium">{{ student_count }} student{{ student_count|pluralize }} enrolled</span>
 </div>
 <div class="flex items-center gap-2 text-on-surface-variant">
 <span class="material-symbols-outlined">verified_user</span>
@@ -39,7 +35,7 @@
 </div>
 <!-- Hero Image Placeholder / Visual Anchor -->
 <div class="w-full aspect-video rounded-lg overflow-hidden mb-12 bg-surface-container-low">
-<img class="w-full h-full object-cover opacity-90 mix-blend-multiply" data-alt="Modern architectural blueprint on a large digital tablet with soft blue ambient lighting and professional studio workspace atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0S0kzLNkCH5aebzgvMM4hgobKBUqixq_brrVP0bxGtLXLZiJuH4SdD4ulZZmH7E4HbuwFOwv65yyLK7GyibYlydvFmClUJqIm6kO1TW6bw4JncX2EtIihmaYL9V0pAKy00Mw_JTYqItTs1iAR18XaLhizRACy3EQa1DnkZOWM-IsjxNNPArsR0j8ybZLFevFTjdFB526lpmz83nihyBarWRqSnyua3EFvV7FfDmB1h9yX558aYDm6KP3U_3hUOmhKEAaB0oMh0A"/>
+<img class="w-full h-full object-cover mix-blend-multiply" data-alt="{{ course.title }}" src="{% if course.thumbnail %}{{ course.thumbnail.url }}{% endif %}"/>
 </div>
 <!-- What You'll Learn: Bento-ish Grid -->
 <section class="mb-16">
@@ -48,22 +44,12 @@
                         What you'll learn
                     </h2>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+{% for point in what_you_learn %}
 <div class="p-6 rounded-lg bg-surface-container-lowest border border-outline-variant/15 flex gap-4">
 <span class="material-symbols-outlined text-primary">check_circle</span>
-<p class="text-on-surface-variant leading-relaxed">Master parametric modeling using industry-standard algorithmic frameworks.</p>
+<p class="text-on-surface-variant leading-relaxed">{{ point }}</p>
 </div>
-<div class="p-6 rounded-lg bg-surface-container-lowest border border-outline-variant/15 flex gap-4">
-<span class="material-symbols-outlined text-primary">check_circle</span>
-<p class="text-on-surface-variant leading-relaxed">Develop sustainable urban systems with AI-assisted structural analysis.</p>
-</div>
-<div class="p-6 rounded-lg bg-surface-container-lowest border border-outline-variant/15 flex gap-4">
-<span class="material-symbols-outlined text-primary">check_circle</span>
-<p class="text-on-surface-variant leading-relaxed">Optimizing spatial layouts for high-density residential blueprints.</p>
-</div>
-<div class="p-6 rounded-lg bg-surface-container-lowest border border-outline-variant/15 flex gap-4">
-<span class="material-symbols-outlined text-primary">check_circle</span>
-<p class="text-on-surface-variant leading-relaxed">Generate 4D visualizations for architectural client presentations.</p>
-</div>
+{% endfor %}
 </div>
 </section>
 <!-- Course Content: List -->
@@ -74,62 +60,31 @@
 <span class="w-8 h-1 bg-primary rounded-full"></span>
                                 Course Content
                             </h2>
-<p class="text-on-surface-variant text-sm mt-2">12 sections • 145 lectures • 22h 45m total length</p>
 </div>
-<button class="text-primary font-bold text-sm hover:underline">Expand all sections</button>
 </div>
 <div class="space-y-4">
-<!-- Section 1 -->
-<div class="rounded-lg bg-surface-container-low overflow-hidden">
-<div class="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors">
+{% for section in course.sections.all %}
+<details class="group rounded-lg bg-surface-container-low overflow-hidden" {% if forloop.first %}open{% endif %}>
+<summary class="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
 <div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
-<span class="font-bold">Introduction to Computational Logic</span>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 group-open:-rotate-180">expand_more</span>
+<span class="font-bold">{{ section.title }}</span>
 </div>
-<span class="text-sm text-on-surface-variant">4 lectures • 45m</span>
-</div>
+</summary>
 <div class="px-6 pb-6 pt-2 bg-white/50">
 <ul class="space-y-4 ml-8 border-l-2 border-primary-fixed pl-6">
-<li class="flex items-center justify-between group">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-on-surface-variant text-lg">play_circle</span>
-<span class="text-sm text-on-surface-variant group-hover:text-primary transition-colors">Course Overview &amp; Setup</span>
-</div>
-<div class="flex items-center gap-4">
-<span class="text-xs font-bold text-primary underline cursor-pointer">Preview</span>
-<span class="text-xs text-on-surface-variant">08:12</span>
-</div>
-</li>
+{% for lesson in section.lessons.all %}
 <li class="flex items-center justify-between opacity-60">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-on-surface-variant text-lg">lock</span>
-<span class="text-sm text-on-surface-variant">Understanding the Blueprint Philosophy</span>
+<span class="text-sm text-on-surface-variant">{{ lesson.title }}</span>
 </div>
-<span class="text-xs text-on-surface-variant">12:45</span>
 </li>
+{% endfor %}
 </ul>
 </div>
-</div>
-<!-- Section 2 (Locked State) -->
-<div class="rounded-lg bg-surface-container-low overflow-hidden">
-<div class="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-<span class="font-bold">Algorithmic Facades &amp; Patterning</span>
-</div>
-<span class="text-sm text-on-surface-variant">8 lectures • 2h 15m</span>
-</div>
-</div>
-<!-- Section 3 (Locked State) -->
-<div class="rounded-lg bg-surface-container-low overflow-hidden">
-<div class="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-<span class="font-bold">Structural Optimization Workflows</span>
-</div>
-<span class="text-sm text-on-surface-variant">12 lectures • 4h 10m</span>
-</div>
-</div>
+</details>
+{% endfor %}
 </div>
 </section>
 <!-- Requirements -->
@@ -139,18 +94,12 @@
                         Requirements
                     </h2>
 <ul class="space-y-3 ml-4">
+{% for requirement in requirements %}
 <li class="flex items-start gap-3 text-on-surface-variant">
 <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
-<p class="text-sm leading-relaxed">Basic understanding of architectural 3D modeling (Rhino or Revit preferred).</p>
+<p class="text-sm leading-relaxed">{{ requirement }}</p>
 </li>
-<li class="flex items-start gap-3 text-on-surface-variant">
-<span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
-<p class="text-sm leading-relaxed">A workstation capable of running parametric simulation software.</p>
-</li>
-<li class="flex items-start gap-3 text-on-surface-variant">
-<span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
-<p class="text-sm leading-relaxed">No prior coding experience required; we use visual programming blocks.</p>
-</li>
+{% endfor %}
 </ul>
 </section>
 </div>
@@ -159,18 +108,28 @@
 <div class="sticky top-28 p-8 rounded-lg bg-surface-container-lowest shadow-sm border border-outline-variant/15">
 <div class="mb-6">
 <div class="flex items-baseline gap-2 mb-1">
-<span class="text-4xl font-black text-on-surface">$89.99</span>
-<span class="text-on-surface-variant line-through text-lg">$149.99</span>
+<span class="text-4xl font-black text-on-surface">${{ course.price }}</span>
 </div>
-<p class="text-tertiary font-bold text-sm">40% off • 2 days left at this price!</p>
 </div>
 <div class="space-y-3 mb-8">
-<button class="w-full py-4 rounded-full signature-gradient text-white font-bold text-base shadow-lg shadow-primary/20 active:scale-95 transition-all">
-                            Buy this course
-                        </button>
-<button class="w-full py-4 rounded-full border-2 border-primary text-primary font-bold text-base hover:bg-primary/5 active:scale-95 transition-all">
-                            Add to Cart
-                        </button>
+{% if user.is_authenticated %}
+    {% if is_enrolled %}
+        <a href="{% url 'courses:course_detail' course.slug %}" class="w-full block text-center py-4 rounded-full primary-gradient text-white font-bold text-base shadow-lg shadow-primary/20 active:scale-95 transition-all">
+            Go to Course
+        </a>
+    {% else %}
+        <form action="{% url 'payments:checkout' course.slug %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="w-full py-4 rounded-full primary-gradient text-white font-bold text-base shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                Buy this course
+            </button>
+        </form>
+    {% endif %}
+{% else %}
+    <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="w-full block text-center py-4 rounded-full primary-gradient text-white font-bold text-base shadow-lg shadow-primary/20 active:scale-95 transition-all">
+        Login to Buy
+    </a>
+{% endif %}
 </div>
 <div class="space-y-4">
 <h4 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">This course includes:</h4>
@@ -197,7 +156,16 @@
 </div>
 </div>
 </div>
-<div class="mt-8 pt-8 border-t border-outline-variant/20 flex items-center justify-between">
+<div class="mt-8 pt-8 border-t border-outline-variant/20">
+<!-- Scholar's Margin Component -->
+<div class="mb-8">
+<h5 class="text-[0.6875rem] font-bold text-on-tertiary-fixed-variant uppercase tracking-widest mb-4">Quick Annotation</h5>
+<p class="text-xs text-on-tertiary-fixed-variant leading-relaxed opacity-80 italic">
+    "The intersection of algorithmic logic and physical mass is where the next century of architecture will be written."
+</p>
+</div>
+
+<div class="flex items-center justify-between mt-auto">
 <div class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors text-on-surface-variant font-bold text-sm">
 <span class="material-symbols-outlined">share</span>
 <span>Share</span>
@@ -206,17 +174,6 @@
 <span class="material-symbols-outlined">bookmark</span>
 <span>Save</span>
 </div>
-</div>
-</div>
-<!-- Scholar's Margin Component -->
-<div class="mt-8 px-8">
-<h5 class="text-[0.6875rem] font-bold text-on-tertiary-fixed-variant uppercase tracking-widest mb-4">Quick Annotation</h5>
-<p class="text-xs text-on-tertiary-fixed-variant leading-relaxed opacity-80 italic">
-                        "The intersection of algorithmic logic and physical mass is where the next century of architecture will be written."
-                    </p>
-<div class="mt-4 flex gap-1">
-<div class="w-2 h-2 rounded-full bg-tertiary"></div>
-<div class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></div>
 </div>
 </div>
 </div>

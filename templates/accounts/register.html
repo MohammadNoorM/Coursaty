@@ -8,7 +8,7 @@
 <div class="absolute bottom-10 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl z-0"></div>
 <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-0 bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/10 overflow-hidden relative z-10">
 <!-- Left Side: Editorial Image/Branding -->
-<div class="hidden md:flex md:col-span-5 signature-gradient p-12 flex-col justify-between text-on-primary">
+<div class="hidden md:flex md:col-span-5 signature-texture p-12 flex-col justify-between text-on-primary">
 <div>
 <div class="text-3xl font-black tracking-tighter mb-8">LearnHub</div>
 <h1 class="text-4xl font-headline font-bold leading-tight tracking-tight mb-4">Master new skills with precision.</h1>
@@ -38,42 +38,32 @@
 <h2 class="text-3xl font-headline font-bold text-on-surface mb-2">Create Account</h2>
 <p class="text-on-surface-variant">Enter your details to begin your journey.</p>
 </div>
-<form class="space-y-6">
-<!-- Username -->
+<form method="POST" action="{% url 'accounts:register' %}" class="space-y-6">
+{% csrf_token %}
+
+{% if form.non_field_errors %}
+<div class="p-3 bg-error/10 border border-error/30 rounded text-error text-sm mb-4">
+    {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% for field in form %}
 <div class="group">
-<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1">Username</label>
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1" for="{{ field.id_for_label }}">{{ field.label }}</label>
 <div class="relative">
-<input class="w-full px-5 py-4 bg-surface-container-low border-none rounded-DEFAULT text-on-surface placeholder:text-outline/50 focus:ring-0 transition-all duration-200" placeholder="johndoe" type="text"/>
+{{ field }}
 <div class="absolute bottom-0 left-0 h-1 w-0 bg-primary group-focus-within:w-full transition-all duration-300 rounded-b-DEFAULT"></div>
 </div>
+{% if field.errors %}
+<p class="text-error text-xs mt-1">{{ field.errors.0 }}</p>
+{% endif %}
 </div>
-<!-- Email -->
-<div class="group">
-<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1">Email Address</label>
-<div class="relative">
-<input class="w-full px-5 py-4 bg-surface-container-low border-none rounded-DEFAULT text-on-surface placeholder:text-outline/50 focus:ring-0 transition-all duration-200" placeholder="john@example.com" type="email"/>
-<div class="absolute bottom-0 left-0 h-1 w-0 bg-primary group-focus-within:w-full transition-all duration-300 rounded-b-DEFAULT"></div>
-</div>
-</div>
-<!-- Password Grid -->
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-<div class="group">
-<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1">Password</label>
-<div class="relative">
-<input class="w-full px-5 py-4 bg-surface-container-low border-none rounded-DEFAULT text-on-surface placeholder:text-outline/50 focus:ring-0 transition-all duration-200" placeholder="••••••••" type="password"/>
-<div class="absolute bottom-0 left-0 h-1 w-0 bg-primary group-focus-within:w-full transition-all duration-300 rounded-b-DEFAULT"></div>
-</div>
-</div>
-<div class="group">
-<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1">Confirm Password</label>
-<div class="relative">
-<input class="w-full px-5 py-4 bg-surface-container-low border-none rounded-DEFAULT text-on-surface placeholder:text-outline/50 focus:ring-0 transition-all duration-200" placeholder="••••••••" type="password"/>
-<div class="absolute bottom-0 left-0 h-1 w-0 bg-primary group-focus-within:w-full transition-all duration-300 rounded-b-DEFAULT"></div>
-</div>
-</div>
-</div>
+{% endfor %}
+
 <div class="pt-4">
-<button class="w-full signature-gradient text-on-primary font-bold py-4 rounded-DEFAULT shadow-md hover:shadow-lg hover:brightness-110 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2" type="submit">
+<button class="w-full signature-texture text-on-primary font-bold py-4 rounded-DEFAULT shadow-md hover:shadow-lg hover:brightness-110 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2" type="submit">
 <span>Register</span>
 <span class="material-symbols-outlined text-sm">arrow_forward</span>
 </button>

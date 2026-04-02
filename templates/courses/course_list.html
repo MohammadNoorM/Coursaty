@@ -12,61 +12,56 @@
             Filters
           </h3>
 <div class="space-y-8">
+<form method="GET" action="{% url 'courses:course_list' %}" class="mb-8">
+  <div class="relative">
+    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">search</span>
+    <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search courses..." class="w-full !pl-12 pr-4 py-3 rounded-lg bg-surface-container-low border-none text-sm font-semibold focus:ring-primary/20 text-on-surface">
+    {% if selected_category %}
+      <input type="hidden" name="category" value="{{ selected_category }}">
+    {% endif %}
+    {% if min_rating %}
+      <input type="hidden" name="rating" value="{{ min_rating }}">
+    {% endif %}
+    {% if sort_by %}
+      <input type="hidden" name="sort" value="{{ sort_by }}">
+    {% endif %}
+  </div>
+</form>
+
 <!-- Categories Section -->
 <section>
 <label class="text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant mb-4 block">Categories</label>
 <div class="space-y-3">
-<label class="flex items-center gap-3 cursor-pointer group">
-<input checked="" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
-<span class="text-sm text-on-surface-variant group-hover:text-primary transition-colors">Computer Science</span>
-</label>
-<label class="flex items-center gap-3 cursor-pointer group">
-<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
-<span class="text-sm text-on-surface-variant group-hover:text-primary transition-colors">Business &amp; Management</span>
-</label>
-<label class="flex items-center gap-3 cursor-pointer group">
-<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
-<span class="text-sm text-on-surface-variant group-hover:text-primary transition-colors">Design &amp; Arts</span>
-</label>
-<label class="flex items-center gap-3 cursor-pointer group">
-<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
-<span class="text-sm text-on-surface-variant group-hover:text-primary transition-colors">Marketing &amp; Sales</span>
-</label>
-<label class="flex items-center gap-3 cursor-pointer group">
-<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
-<span class="text-sm text-on-surface-variant group-hover:text-primary transition-colors">Data Science</span>
-</label>
-</div>
-</section>
-<!-- Difficulty Section -->
-<section>
-<label class="text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant mb-4 block">Level</label>
-<div class="flex flex-wrap gap-2">
-<button class="px-4 py-2 rounded-full bg-surface-container-high text-on-primary-fixed-variant text-xs font-semibold hover:bg-primary-fixed transition-colors">Beginner</button>
-<button class="px-4 py-2 rounded-full bg-primary text-on-primary text-xs font-semibold">Intermediate</button>
-<button class="px-4 py-2 rounded-full bg-surface-container-high text-on-primary-fixed-variant text-xs font-semibold hover:bg-primary-fixed transition-colors">Advanced</button>
+<a href="{% url 'courses:course_list' %}?{% if search_query %}q={{ search_query }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="flex items-center gap-3 cursor-pointer group">
+<input type="radio" name="category_filter" class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary/20" {% if not selected_category %}checked{% endif %} disabled/>
+<span class="text-sm {% if not selected_category %}text-primary font-bold{% else %}text-on-surface-variant group-hover:text-primary{% endif %} transition-colors">All Categories</span>
+</a>
+{% for category in categories %}
+<a href="{% url 'courses:course_list' %}?category={{ category.slug }}{% if search_query %}&q={{ search_query }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="flex items-center gap-3 cursor-pointer group">
+<input type="radio" name="category_filter" class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary/20" {% if selected_category == category.slug %}checked{% endif %} disabled/>
+<span class="text-sm {% if selected_category == category.slug %}text-primary font-bold{% else %}text-on-surface-variant group-hover:text-primary{% endif %} transition-colors">{{ category.name }}</span>
+</a>
+{% endfor %}
 </div>
 </section>
 <!-- Rating Section -->
 <section>
 <label class="text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant mb-4 block">Minimum Rating</label>
 <div class="space-y-2">
-<div class="flex items-center justify-between text-xs text-on-surface-variant px-1">
-<span>4.0+</span>
-<span class="material-symbols-outlined text-[1rem] text-tertiary" data-icon="star" data-weight="fill">star</span>
-</div>
-<input class="w-full h-1.5 bg-surface-container-highest rounded-full appearance-none accent-primary cursor-pointer" type="range"/>
+<form method="GET" action="{% url 'courses:course_list' %}" id="rating-form">
+  {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+  {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+  {% if sort_by %}<input type="hidden" name="sort" value="{{ sort_by }}">{% endif %}
+  <div class="flex items-center justify-between text-xs text-on-surface-variant px-1 mb-2">
+  <span id="rating-display">{{ min_rating|default:"0.0" }}+</span>
+  <span class="material-symbols-outlined text-[1rem] text-tertiary" data-icon="star" data-weight="fill">star</span>
+  </div>
+  <input name="rating" min="0" max="5" step="0.5" value="{{ min_rating|default:'0' }}" oninput="document.getElementById('rating-display').innerText = parseFloat(this.value).toFixed(1) + '+'" onchange="this.form.submit()" class="w-full h-1.5 bg-surface-container-highest rounded-full appearance-none accent-primary cursor-pointer" type="range"/>
+</form>
 </div>
 </section>
 </div>
-</div>
-<!-- Featured Tag Card -->
-<div class="p-6 rounded-2xl bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-xl shadow-primary/10">
-<p class="text-xs font-bold uppercase tracking-widest opacity-80 mb-2">Scholar's Margin</p>
-<h4 class="font-bold text-lg mb-4 leading-tight">New Certification Tracks for 2024</h4>
-<p class="text-sm opacity-90 mb-6 leading-relaxed">Upgrade your credentials with our partner-verified academic pathways.</p>
-<button class="w-full py-3 bg-surface-container-lowest text-primary font-bold rounded-xl text-xs hover:bg-white transition-all">Explore tracks</button>
-</div>
+
 </div>
 </aside>
 <!-- Main Course Grid -->
@@ -74,169 +69,99 @@
 <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
 <div>
 <h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">Academic Excellence</h1>
-<p class="text-on-surface-variant text-lg">Browse 1,240 professional courses curated by experts.</p>
+<p class="text-on-surface-variant text-lg">Browse {{ page_obj.paginator.count }} professional courses curated by experts.</p>
 </div>
+<form method="GET" action="{% url 'courses:course_list' %}">
+{% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+{% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+{% if min_rating %}<input type="hidden" name="rating" value="{{ min_rating }}">{% endif %}
 <div class="flex items-center gap-3">
 <span class="text-sm font-medium text-on-surface-variant">Sort by:</span>
-<select class="bg-surface-container-low border-none rounded-lg text-sm font-semibold focus:ring-primary/20 text-on-surface pr-10">
-<option>Most Relevant</option>
-<option>Newest First</option>
-<option>Highest Rated</option>
-<option>Price: Low to High</option>
+<select name="sort" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-sm font-semibold focus:ring-primary/20 text-on-surface pr-10">
+<option value="relevant" {% if sort_by == 'relevant' or not sort_by %}selected{% endif %}>Most Relevant</option>
+<option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest First</option>
+<option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Highest Rated</option>
+<option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
 </select>
 </div>
+</form>
 </header>
 <!-- Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-<!-- Course Card 1 -->
-<div class="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-on-surface/5 transition-all duration-300 flex flex-col">
+{% for course in courses %}
+<a href="{% url 'courses:course_detail' course.slug %}" class="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-on-surface/5 transition-all duration-300 flex flex-col block">
 <div class="relative h-56 overflow-hidden">
-<img alt="UI Design Course" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-alt="high-end minimalist workspace with sleek laptop and design books on clean white desk in soft natural daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGF5dJoRocCqph2Oi3sTWwjF9Y8__OK822YWozpwCZYEPskAsxMvF0n1kez0ns0eNAJve-e2leASs7LENfBAdElQlt5b9iYEXQvc--u0hVC-KMHGlNSayE06Rv9-FUiYX0fvv5dBbODp6EUqkb1DTAGPaxc-vLd2CxxcSKg2o4Ns9odteGWJFbnneTlePtfEJXbpdUBkIJToCDC_3x3scwF5UEwLaEdwlNW8OU9sWcx8HxGm2XH-We2PaATdId4InaQW3rrnfc7w"/>
+<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-alt="{{ course.title }}" src="{% if course.thumbnail %}{{ course.thumbnail.url }}{% endif %}"/>
 <div class="absolute top-4 left-4 flex gap-2">
-<span class="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">Design</span>
-<span class="bg-tertiary text-on-tertiary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">Bestseller</span>
+<span class="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">{{ course.category.name }}</span>
 </div>
 </div>
 <div class="p-8 flex flex-col flex-1">
 <div class="flex justify-between items-start mb-4">
-<h3 class="text-xl font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">Advanced UI/UX Architecture &amp; Systems</h3>
-<span class="text-2xl font-black text-primary">$89.00</span>
+<h3 class="text-xl font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">{{ course.title }}</h3>
+<span class="text-2xl font-black text-primary">${{ course.price }}</span>
 </div>
-<p class="text-on-surface-variant text-sm mb-8 line-clamp-2 leading-relaxed">Master the complexities of modern design systems and architectural principles for large-scale digital products.</p>
-<div class="mt-auto pt-6 flex items-center justify-between border-t border-outline-variant/10">
-<div class="flex items-center gap-2">
-<div class="flex text-tertiary">
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star_half" data-weight="fill">star_half</span>
-</div>
-<span class="text-xs font-bold text-on-surface">4.8</span>
-<span class="text-xs text-on-surface-variant">(1.2k)</span>
-</div>
-<div class="flex items-center gap-2 text-on-surface-variant text-xs font-medium">
-<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
-                24h total
-              </div>
-</div>
-</div>
-</div>
-<!-- Course Card 2 -->
-<div class="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-on-surface/5 transition-all duration-300 flex flex-col">
-<div class="relative h-56 overflow-hidden">
-<img alt="Data Science Course" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-alt="glowing blue digital data visualization charts and graphs on dark interface background with futuristic aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhibwh3m49S1_0ySu13g_OWekbDS7otJ6vzGeEcaU1xbNyYYXtvZE-cIQtMh0Yhpe1qggn8WrfZEtEC4lqyWil91hjadtc_j-yH6N5NY9IQXtWUQfrm900LDCUCkluOYVRX7yCkLPlWDgBOWZank_Kr7Ril1WmZcpjHS7_q3semJPeRFPcKgp0EWiwk8-NiBOFNu0BS9rmaw1iVliC0BpKZwICHl9DWpIGtL5Cf2TXWYjy0uqIM-PdugF2YKRJ3AHKwvg2lfolvA"/>
-<div class="absolute top-4 left-4 flex gap-2">
-<span class="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">Data Science</span>
-</div>
-</div>
-<div class="p-8 flex flex-col flex-1">
-<div class="flex justify-between items-start mb-4">
-<h3 class="text-xl font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">Neural Networks &amp; Deep Learning Essentials</h3>
-<span class="text-2xl font-black text-primary">$124.00</span>
-</div>
-<p class="text-on-surface-variant text-sm mb-8 line-clamp-2 leading-relaxed">A comprehensive guide to building modern AI models with TensorFlow and PyTorch from the ground up.</p>
-<div class="mt-auto pt-6 flex items-center justify-between border-t border-outline-variant/10">
-<div class="flex items-center gap-2">
-<div class="flex text-tertiary">
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-</div>
-<span class="text-xs font-bold text-on-surface">4.9</span>
-<span class="text-xs text-on-surface-variant">(850)</span>
-</div>
-<div class="flex items-center gap-2 text-on-surface-variant text-xs font-medium">
-<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
-                45h total
-              </div>
-</div>
-</div>
-</div>
-<!-- Course Card 3 -->
-<div class="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-on-surface/5 transition-all duration-300 flex flex-col">
-<div class="relative h-56 overflow-hidden">
-<img alt="Leadership Course" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-alt="professional collaborative meeting in bright modern office with glass walls and vibrant team engagement" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVjxf8vjRetHIVC5XOhtKHOOXjucYI-jyxdySVx5fuWITLrOt4VfFwKD_X6z86oRdmhbkaTf6Pg0ZqvawHE0H0KS7NoUm1_jKXnvqYtFwJ1Nk4KBXUXWpqWA3q4peH3WBYnIliYODxCxXbHDynnFVHobzlu_dEXIgiTJMb5GdFY6BE8qJkowzecq_R49wx8YoWnLSAPYnT-_qI5R2M5r0Pp1TmmvOVAyoYtHbxfPWmp5379cBfXJsxSKSbKjw5PhdbxUAhQXrnrg"/>
-<div class="absolute top-4 left-4 flex gap-2">
-<span class="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">Business</span>
-</div>
-</div>
-<div class="p-8 flex flex-col flex-1">
-<div class="flex justify-between items-start mb-4">
-<h3 class="text-xl font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">Agile Leadership &amp; Organizational Culture</h3>
-<span class="text-2xl font-black text-primary">Free</span>
-</div>
-<p class="text-on-surface-variant text-sm mb-8 line-clamp-2 leading-relaxed">Learn how to drive innovation and manage high-performance teams in a rapidly shifting corporate landscape.</p>
-<div class="mt-auto pt-6 flex items-center justify-between border-t border-outline-variant/10">
-<div class="flex items-center gap-2">
-<div class="flex text-tertiary">
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star_outline" data-weight="fill">star_outline</span>
-</div>
-<span class="text-xs font-bold text-on-surface">4.2</span>
-<span class="text-xs text-on-surface-variant">(4k)</span>
-</div>
-<div class="flex items-center gap-2 text-on-surface-variant text-xs font-medium">
-<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+<p class="text-on-surface-variant text-sm mb-8 line-clamp-2 leading-relaxed flex-grow">{{ course.short_description }}</p>
+        <div class="mt-auto pt-6 flex items-center justify-between border-t border-outline-variant/10">
+            <div class="flex items-center gap-2">
+                {% if course.avg_rating %}
+                <div class="flex text-tertiary items-center">
+                    <span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
+                </div>
+                <span class="text-xs font-bold text-on-surface">{{ course.avg_rating|floatformat:1 }}</span>
+                {% else %}
+                <div class="flex items-center text-on-surface-variant opacity-70">
+                    <span class="material-symbols-outlined text-[18px]" data-icon="star">star</span>
+                </div>
+                <span class="text-xs font-bold text-on-surface-variant opacity-80">New</span>
+                {% endif %}
+            </div>
+            <div class="flex items-center gap-2 text-on-surface-variant text-xs font-medium">
+                <span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
                 12h total
-              </div>
+            </div>
+        </div>
+    </div>
+</a>
+{% empty %}
+<p>No courses found.</p>
+{% endfor %}
 </div>
-</div>
-</div>
-<!-- Course Card 4 -->
-<div class="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-on-surface/5 transition-all duration-300 flex flex-col">
-<div class="relative h-56 overflow-hidden">
-<img alt="Web Dev Course" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-alt="clean lines of code on a computer screen in a dimly lit developer workspace with a blue ambient glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVcN54npv9g5nbcZ4SEB9mexEiMoOr9btAR9iY085Vl03wy1fuSJZLiVBkPB61LAFbRdeWIEONtA2uj_Vf6ou-eL9lGbbTGB7C2mXelzEbykaTZLIuGCjZgMsZSHvyfPjEMCLKQn1QeQvL_tE2sWzagiE6Wd44rS80fAAKDu-OyVcqo2uEUiCPMSkCfzu7dkzIdPZLCiFMHE8zo-izqMur6UWNmqCh3BlNvFKShVVGZdKSGlA_28u0bXzJD1vMIlkDbeawQhGa1w"/>
-<div class="absolute top-4 left-4 flex gap-2">
-<span class="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">Programming</span>
-<span class="bg-secondary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">New</span>
-</div>
-</div>
-<div class="p-8 flex flex-col flex-1">
-<div class="flex justify-between items-start mb-4">
-<h3 class="text-xl font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">Full-Stack Mastery with Next.js &amp; GraphQL</h3>
-<span class="text-2xl font-black text-primary">$149.00</span>
-</div>
-<p class="text-on-surface-variant text-sm mb-8 line-clamp-2 leading-relaxed">The ultimate path to becoming a senior web developer in 2024 using the most powerful modern stack.</p>
-<div class="mt-auto pt-6 flex items-center justify-between border-t border-outline-variant/10">
-<div class="flex items-center gap-2">
-<div class="flex text-tertiary">
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill">star</span>
-</div>
-<span class="text-xs font-bold text-on-surface">5.0</span>
-<span class="text-xs text-on-surface-variant">(120)</span>
-</div>
-<div class="flex items-center gap-2 text-on-surface-variant text-xs font-medium">
-<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
-                68h total
-              </div>
-</div>
-</div>
-</div>
-</div>
+
 <!-- Pagination -->
+{% if page_obj.has_other_pages %}
 <nav class="mt-16 flex items-center justify-center gap-2">
-<button class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+{% if page_obj.has_previous %}
+<a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</a>
+{% else %}
+<button class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant/50 cursor-not-allowed transition-colors" disabled>
 <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
 </button>
-<button class="w-12 h-12 rounded-full bg-primary text-on-primary font-bold shadow-lg shadow-primary/20">1</button>
-<button class="w-12 h-12 rounded-full font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">2</button>
-<button class="w-12 h-12 rounded-full font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">3</button>
-<span class="px-2 text-on-surface-variant">...</span>
-<button class="w-12 h-12 rounded-full font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">12</button>
-<button class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+{% endif %}
+
+{% for num in page_range %}
+    {% if page_obj.number == num %}
+    <button class="w-12 h-12 rounded-full bg-primary text-on-primary font-bold shadow-lg shadow-primary/20">{{ num }}</button>
+    {% elif num == page_obj.paginator.ELLIPSIS %}
+    <span class="px-2 text-on-surface-variant font-bold">...</span>
+    {% else %}
+    <a href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">{{ num }}</a>
+    {% endif %}
+{% endfor %}
+
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</a>
+{% else %}
+<button class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant/50 cursor-not-allowed transition-colors" disabled>
 <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
 </button>
+{% endif %}
 </nav>
+{% endif %}
 </div>
 </main>
 {% endblock %}

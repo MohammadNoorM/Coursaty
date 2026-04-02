@@ -57,7 +57,7 @@ def payment_success(request):
     payment = Payment.objects.filter(stripe_session_id=session_id, user=request.user).first()
 
     if payment and payment.status == 'completed':
-        return render(request, 'payments/success.html', {'course': payment.course})
+        return render(request, 'payments/payment.html', {'course': payment.course, 'status': 'success'})
     
     messages.error(request, 'Payment not confirmed yet. Please wait a moment.')
     return redirect('courses:home')
@@ -66,7 +66,7 @@ def payment_success(request):
 @login_required
 def payment_cancel(request):
     messages.warning(request, 'Payment was cancelled. You can try again.')
-    return render(request, 'payments/cancel.html')
+    return render(request, 'payments/payment.html', {'status': 'cancel'})
 
 @csrf_exempt
 def stripe_webhook(request):

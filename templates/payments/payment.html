@@ -3,9 +3,10 @@
 
 {% block content %}
 <main class="flex-grow flex items-center justify-center p-6 md:p-12">
-<div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+<div class="max-w-6xl w-full flex justify-center items-center gap-12">
+{% if status == 'success' %}
 <!-- SUCCESS STATE CARD -->
-<div class="relative group">
+<div class="relative group max-w-lg w-full">
 <!-- Decorative background glow -->
 <div class="absolute -inset-1 bg-gradient-to-r from-primary/20 to-primary-container/20 rounded-lg blur-2xl opacity-50 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
 <div class="relative flex flex-col items-center p-12 bg-surface-container-lowest rounded-lg h-full text-center border border-outline-variant/15 transition-all duration-300">
@@ -14,27 +15,17 @@
 </div>
 <h1 class="font-headline text-3xl font-extrabold tracking-tight mb-4 text-on-surface">Payment Successful</h1>
 <p class="text-on-surface-variant mb-10 max-w-sm leading-relaxed">
-                        Your enrollment in <span class="font-semibold text-primary">Advanced UI Architecture</span> is confirmed. Get ready to transform your design workflow.
+                        Your enrollment in <span class="font-semibold text-primary">{{ course.title }}</span> is confirmed. Get ready to transform your learning journey.
                     </p>
-<!-- Transaction Details Bento Style -->
-<div class="w-full grid grid-cols-2 gap-4 mb-10 text-left">
-<div class="p-4 bg-surface-container-low rounded-lg">
-<p class="text-[0.6875rem] font-bold uppercase tracking-wider text-outline mb-1">Amount Paid</p>
-<p class="text-lg font-bold text-on-surface">$149.00</p>
-</div>
-<div class="p-4 bg-surface-container-low rounded-lg">
-<p class="text-[0.6875rem] font-bold uppercase tracking-wider text-outline mb-1">Order ID</p>
-<p class="text-lg font-bold text-on-surface">#LH-9921</p>
-</div>
-</div>
-<button class="mt-auto w-full py-4 bg-primary-gradient text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all duration-200">
+<a href="{% url 'courses:course_detail' course.slug %}" class="w-full text-center py-4 bg-primary-gradient text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all duration-200 block">
                         Go to Course
-                    </button>
+                    </a>
 <p class="mt-6 text-sm text-on-surface-variant/70 italic">A receipt has been sent to your email.</p>
 </div>
 </div>
+{% elif status == 'cancel' %}
 <!-- CANCELLED STATE CARD -->
-<div class="relative group">
+<div class="relative group max-w-lg w-full">
 <div class="absolute -inset-1 bg-gradient-to-r from-error/10 to-error-container/10 rounded-lg blur-2xl opacity-50 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
 <div class="relative flex flex-col items-center p-12 bg-surface-container-lowest rounded-lg h-full text-center border border-outline-variant/15 transition-all duration-300">
 <div class="mb-8 p-6 bg-error-container/30 rounded-full inline-flex items-center justify-center">
@@ -44,37 +35,14 @@
 <p class="text-on-surface-variant mb-10 max-w-sm leading-relaxed">
                         The transaction was cancelled and you haven't been charged. If this was a mistake, you can try the payment again.
                     </p>
-<!-- Support/Action Bento -->
-<div class="w-full space-y-4 mb-10">
-<div class="flex items-center gap-4 p-5 bg-surface-container-low rounded-lg text-left">
-<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center">
-<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="help">help</span>
-</div>
-<div>
-<p class="text-sm font-bold text-on-surface">Need help?</p>
-<p class="text-xs text-on-surface-variant">Contact our 24/7 support team</p>
-</div>
-</div>
-<div class="flex items-center gap-4 p-5 bg-surface-container-low rounded-lg text-left">
-<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center">
-<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="sync">sync</span>
-</div>
-<div>
-<p class="text-sm font-bold text-on-surface">Payment Issue?</p>
-<p class="text-xs text-on-surface-variant">Check your card balance or try another method</p>
-</div>
-</div>
-</div>
 <div class="mt-auto w-full flex flex-col gap-3">
-<button class="w-full py-4 bg-primary-gradient text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all duration-200">
-                            Back to Course
-                        </button>
-<button class="w-full py-3 text-primary font-semibold rounded-lg hover:bg-primary-fixed/30 transition-colors duration-200">
-                            Try Again
-                        </button>
+<a href="{% url 'courses:home' %}" class="w-full text-center py-4 bg-primary-gradient text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all duration-200 block">
+                            Back to Courses
+                        </a>
 </div>
 </div>
 </div>
+{% endif %}
 </div>
 </main>
 {% endblock %}

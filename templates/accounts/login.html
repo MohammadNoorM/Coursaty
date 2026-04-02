@@ -18,30 +18,45 @@
 <h2 class="text-2xl font-bold text-on-surface tracking-tight mb-2">Welcome Back</h2>
 <p class="text-on-surface-variant text-sm">Please enter your credentials to access your academic studio.</p>
 </header>
-<form class="space-y-6">
-<!-- Email Field -->
-<div class="space-y-2">
-<label class="block text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant ml-1" for="email">
-                            Email Address
+<form method="POST" action="{% url 'accounts:login' %}" class="space-y-6">
+{% csrf_token %}
+
+{% if form.non_field_errors %}
+<div class="p-3 bg-error/10 border border-error/30 rounded text-error text-sm mb-4">
+    {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Username Field -->
+<div class="space-y-2 group">
+<label class="block text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant ml-1" for="{{ form.username.id_for_label }}">
+                            Username
                         </label>
-<div class="relative group">
-<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-4 text-on-surface placeholder:text-outline/50 focus:ring-0 transition-all duration-300 peer" id="email" name="email" placeholder="name@university.edu" type="email"/>
-<div class="absolute bottom-0 left-0 h-[2px] w-0 bg-primary transition-all duration-300 peer-focus:w-full"></div>
+<div class="relative">
+{{ form.username }}
+<div class="absolute bottom-0 left-0 h-[2px] w-0 bg-primary transition-all duration-300 group-focus-within:w-full"></div>
 </div>
+{% if form.username.errors %}
+<p class="text-error text-xs">{{ form.username.errors.0 }}</p>
+{% endif %}
 </div>
+
 <!-- Password Field -->
-<div class="space-y-2">
-<div class="flex justify-between items-end">
-<label class="block text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant ml-1" for="password">
+<div class="space-y-2 group">
+<label class="block text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant ml-1" for="{{ form.password.id_for_label }}">
                                 Password
                             </label>
-<a class="text-[0.6875rem] font-bold text-primary hover:text-primary-container transition-colors uppercase tracking-widest" href="{% url 'accounts:password_reset' %}">Forgot?</a>
+<div class="relative">
+{{ form.password }}
+<div class="absolute bottom-0 left-0 h-[2px] w-0 bg-primary transition-all duration-300 group-focus-within:w-full"></div>
 </div>
-<div class="relative group">
-<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-4 text-on-surface placeholder:text-outline/50 focus:ring-0 transition-all duration-300 peer" id="password" name="password" placeholder="••••••••" type="password"/>
-<div class="absolute bottom-0 left-0 h-[2px] w-0 bg-primary transition-all duration-300 peer-focus:w-full"></div>
+{% if form.password.errors %}
+<p class="text-error text-xs">{{ form.password.errors.0 }}</p>
+{% endif %}
 </div>
-</div>
+
 <!-- Actions -->
 <div class="pt-4">
 <button class="w-full signature-texture text-on-primary font-bold py-4 rounded-DEFAULT shadow-sm active:scale-[0.98] transition-all duration-200" type="submit">

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Advanced Architectural Systems | LearnHub{% endblock %}
+{% block title %}{{ course.title }} | LearnHub{% endblock %}
 
 {% block content %}
 <main class="pt-24 pb-20 px-6 max-w-7xl mx-auto">
@@ -8,34 +8,17 @@
 <div class="lg:col-span-8">
 <!-- Course Breadcrumb & Hero -->
 <nav class="flex items-center gap-2 text-label-sm font-bold uppercase tracking-wider text-on-surface-variant mb-6">
-<span>Architecture</span>
+<span>{{ course.category.name }}</span>
 <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-<span class="text-primary">Systems Design</span>
+<span class="text-primary">{{ course.title }}</span>
 </nav>
 <h1 class="text-[3.5rem] font-black leading-[1.1] tracking-tighter text-on-surface mb-8">
-                    Advanced <br/><span class="text-primary">Architectural Systems</span>
+                    {{ course.title }}
 </h1>
-<!-- Progress Section (Specific to Enrolled State) -->
-<div class="bg-surface-container-low p-8 rounded-lg mb-12 flex flex-col gap-6">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">analytics</span>
-<span class="font-bold text-on-surface">Your Learning Progress</span>
-</div>
-<span class="text-primary font-bold">65% Complete</span>
-</div>
-<div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full signature-gradient w-[65%] rounded-full"></div>
-</div>
-<div class="flex gap-4 text-sm text-on-surface-variant">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">check_circle</span> 12/18 Lessons</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">schedule</span> 4h 20m remaining</span>
-</div>
-</div>
 <!-- Course Description -->
 <div class="prose prose-slate max-w-none">
 <p class="text-xl leading-relaxed text-on-surface-variant mb-12">
-                        Master the complex intersections of structural integrity, environmental performance, and aesthetic intent. This intensive module covers high-performance building skins and parametric structural optimization for the modern era.
+                        {{ course.short_description }}
                     </p>
 <!-- Bento Grid for Syllabus Highlights -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16">
@@ -62,36 +45,31 @@
 <!-- Curriculum List -->
 <h2 class="text-2xl font-bold mb-8">Course Curriculum</h2>
 <div class="space-y-4">
-<div class="group flex items-center justify-between p-5 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer">
-<div class="flex items-center gap-4">
-<span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs">01</span>
-<div>
-<h4 class="font-bold text-on-surface">Foundation of Modern Shells</h4>
-<p class="text-xs text-on-surface-variant">Video • 45 minutes</p>
-</div>
-</div>
-<span class="material-symbols-outlined text-primary">play_circle</span>
-</div>
-<div class="group flex items-center justify-between p-5 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer">
-<div class="flex items-center gap-4">
-<span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs">02</span>
-<div>
-<h4 class="font-bold text-on-surface">Thermal Bridges &amp; Mitigation</h4>
-<p class="text-xs text-on-surface-variant">Interactive Lab • 1.5 hours</p>
-</div>
-</div>
-<span class="material-symbols-outlined text-primary">play_circle</span>
-</div>
-<div class="flex items-center justify-between p-5 bg-white border border-primary/20 rounded-lg">
-<div class="flex items-center gap-4">
-<span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white font-bold text-xs">03</span>
-<div>
-<h4 class="font-bold text-on-surface">Structural Resilience Analysis</h4>
-<p class="text-xs text-primary font-medium">In Progress • 22m remaining</p>
-</div>
-</div>
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">pause_circle</span>
-</div>
+{% for section in course.sections.all %}
+<details class="group rounded-lg bg-surface-container-low overflow-hidden" {% if forloop.first %}open{% endif %}>
+  <summary class="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
+    <div class="flex items-center gap-4">
+      <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 group-open:-rotate-180">expand_more</span>
+      <h3 class="text-xl font-bold text-on-surface">{{ section.title }}</h3>
+    </div>
+  </summary>
+  <div class="px-6 pb-6 pt-2 bg-white/50">
+  {% for lesson in section.lessons.all %}
+  <a href="{% url 'courses:lesson' course.slug lesson.slug %}" class="block">
+  <div class="group/lesson flex items-center justify-between p-5 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer mb-2">
+  <div class="flex items-center gap-4">
+  <span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs">{{ forloop.counter }}</span>
+  <div>
+  <h4 class="font-bold text-on-surface">{{ lesson.title }}</h4>
+  </div>
+  </div>
+  <span class="material-symbols-outlined text-primary group-hover/lesson:scale-110 transition-transform">play_circle</span>
+  </div>
+  </a>
+  {% endfor %}
+  </div>
+</details>
+{% endfor %}
 </div>
 </div>
 </div>
@@ -101,23 +79,17 @@
 <!-- Enrollment Status Card -->
 <div class="bg-surface-container-lowest rounded-lg overflow-hidden border border-outline-variant/15 shadow-sm">
 <div class="aspect-video relative">
-<img class="w-full h-full object-cover" data-alt="modern architectural blueprint with orange calipers and technical drawings on a clean drafting table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAolCsQ1nmfnmUdqtYHqPfXenwOOuXPQ4CItT2cXjuexjrYMpNG2AeAdErBs_1xAeIZV3k79pjeUiyEaMcBl8zmFOhufDn0UmXPGTFaQE_xLVUzczes8jINJmAKSSerqYyf6H0Sxd75pajlSs15wk2OO1uI9VhQYbD2TGPS0CixVEnD-yPKsvVjQWS7lHMGn1l-fIlWiyRIG0NPxcRa7-s85sUWMeN7hCgtGW-qGd-9GFevqNz0kycJaw_LS2sEqw2PSHvQMZV7vA"/>
+<img class="w-full h-full object-cover" data-alt="{{ course.title }}" src="{% if course.thumbnail %}{{ course.thumbnail.url }}{% endif %}"/>
 <div class="absolute inset-0 bg-primary/20 flex items-center justify-center">
-<button class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center text-primary hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
-</button>
 </div>
 </div>
 <div class="p-8">
 <div class="flex items-center justify-between mb-6">
 <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Enrolled</span>
-<span class="text-on-surface-variant text-sm flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">group</span> 1.2k Students
-                                </span>
 </div>
-<button class="w-full signature-gradient text-white py-4 rounded-lg font-bold text-lg mb-4 hover:opacity-90 active:scale-95 transition-all">
+<a href="{% url 'courses:lesson' course.slug course.sections.first.lessons.first.slug %}" class="block text-center w-full signature-gradient text-white py-4 rounded-lg font-bold text-lg mb-4 hover:opacity-90 active:scale-95 transition-all">
                                 Go to course
-                            </button>
+                            </a>
 <button class="w-full bg-surface-container-high text-on-primary-fixed-variant py-4 rounded-lg font-bold transition-all hover:bg-surface-container-highest">
                                 Download Resources
                             </button>

@@ -12,174 +12,179 @@
 </div>
 <div class="flex gap-4">
 <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm ghost-border min-w-[160px]">
-<p class="text-on-surface-variant text-sm font-medium mb-1">Active</p>
-<p class="text-3xl font-black text-primary">04</p>
-</div>
-<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm ghost-border min-w-[160px]">
-<p class="text-on-surface-variant text-sm font-medium mb-1">Completed</p>
-<p class="text-3xl font-black text-secondary">12</p>
-</div>
-</div>
-</div>
-<!-- Featured/Continue Learning Asymmetric Layout -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-<div class="lg:col-span-8 bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm ghost-border group relative">
-<div class="relative h-64 md:h-full min-h-[320px]">
-<img alt="Learning Background" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Modern workspace with laptop, open notebook, and clean desk under soft afternoon sunlight, professional and focused atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxjp6GQLSZdK0x0nUbwN5S_MPXNJk6vqNnPYaDdplK3CrSqZ9WBgcglPkbctyXbi-Yo8j9ktue_ERXz1SRGBgU81Vey5vgpQqsKLVbKtAr1BowR8Lx-jiGyLxoI-bfTXxq1zDhb8r6JlVi9Qt3DllDyjEcfyNeV6pfQVjvdU1nsVoIRjvwuAHoGzDycJKe7oZxzgOA3j8-c2IEyeTiPkihYSda6gnFopDObK3p5B9Uuweq_6cqihGhVuVE9qwXZtFQwmBXupzL7g"/>
-<div class="absolute inset-0 bg-gradient-to-r from-on-surface/90 via-on-surface/40 to-transparent p-8 md:p-12 flex flex-col justify-end">
-<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold w-fit mb-4">IN PROGRESS</span>
-<h2 class="text-3xl md:text-4xl font-bold text-white mb-4 max-w-md">Advanced Architectural Visualization</h2>
-<div class="flex items-center gap-4 text-white/80 text-sm mb-6">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 12h remaining</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">menu_book</span> Module 4 of 8</span>
-</div>
-<div class="w-full max-w-sm bg-white/20 h-2 rounded-full mb-8 overflow-hidden">
-<div class="bg-primary-container h-full w-[65%] rounded-full"></div>
-</div>
-<button class="bg-white text-primary px-8 py-3 rounded-full font-bold w-fit hover:bg-primary-fixed transition-colors active:scale-95">Resume Lesson</button>
-</div>
-</div>
-</div>
-<div class="lg:col-span-4 flex flex-col gap-6">
-<div class="bg-primary scholar-gradient p-8 rounded-3xl text-white shadow-lg">
-<h3 class="text-xl font-bold mb-2">Learning Streak</h3>
-<p class="text-white/80 text-sm mb-6">You've logged in 5 days in a row. Keep it up!</p>
-<div class="flex justify-between items-end">
-<div class="flex gap-2">
-<div class="w-2 h-12 bg-white/20 rounded-full flex flex-col justify-end"><div class="h-1/2 bg-white rounded-full"></div></div>
-<div class="w-2 h-12 bg-white/20 rounded-full flex flex-col justify-end"><div class="h-3/4 bg-white rounded-full"></div></div>
-<div class="w-2 h-12 bg-white/20 rounded-full flex flex-col justify-end"><div class="h-full bg-white rounded-full"></div></div>
-<div class="w-2 h-12 bg-white/20 rounded-full flex flex-col justify-end"><div class="h-2/3 bg-white rounded-full"></div></div>
-<div class="w-2 h-12 bg-white/20 rounded-full flex flex-col justify-end"><div class="h-5/6 bg-white rounded-full"></div></div>
-</div>
-<span class="text-4xl font-black">05</span>
-</div>
-</div>
-<div class="bg-surface-container-high p-8 rounded-3xl flex-grow">
-<h3 class="font-bold text-on-surface mb-4">Next up in queue</h3>
-<div class="flex gap-4 items-center p-3 bg-surface-container-lowest rounded-2xl shadow-sm mb-3">
-<div class="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center">
-<span class="material-symbols-outlined text-on-secondary-container">play_circle</span>
-</div>
-<div>
-<p class="text-sm font-bold text-on-surface">Lighting Fundamentals</p>
-<p class="text-xs text-on-surface-variant">Course: 3D Rendering</p>
-</div>
-</div>
-<div class="flex gap-4 items-center p-3 bg-surface-container-lowest/50 rounded-2xl mb-3">
-<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center">
-<span class="material-symbols-outlined text-on-tertiary-fixed">quiz</span>
-</div>
-<div>
-<p class="text-sm font-bold text-on-surface">Weekly Knowledge Check</p>
-<p class="text-xs text-on-surface-variant">Due in 2 days</p>
-</div>
-</div>
+<p class="text-on-surface-variant text-sm font-medium mb-1">Total Enrolled</p>
+<p class="text-3xl font-black text-primary">{{ enrollments.count|default:"0" }}</p>
 </div>
 </div>
 </div>
 </section>
 <!-- Main Course Grid -->
 <section class="mb-20">
-<div class="flex items-center justify-between mb-8">
-<h2 class="text-2xl font-bold text-on-surface">All Enrolled Courses</h2>
-<div class="flex gap-2">
-<button class="px-4 py-2 rounded-full bg-surface-container-high text-on-surface text-sm font-medium hover:bg-surface-container-highest transition-colors">All</button>
-<button class="px-4 py-2 rounded-full text-on-surface-variant text-sm font-medium hover:bg-surface-container-high transition-colors">Design</button>
-<button class="px-4 py-2 rounded-full text-on-surface-variant text-sm font-medium hover:bg-surface-container-high transition-colors">Business</button>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+<h2 class="text-2xl font-bold text-on-surface shrink-0">All Enrolled Courses</h2>
+<div class="flex flex-wrap gap-2 md:justify-end" id="dashboard-category-filters">
+<button data-filter="All" class="filter-btn whitespace-nowrap shrink-0 px-4 py-2 rounded-full bg-surface-container-high text-on-surface text-sm font-medium hover:bg-surface-container-highest transition-colors">All</button>
+<!-- Other filter buttons will be generated dynamically by JS -->
 </div>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="enrolled-courses-grid">
 <!-- Course Card 1 -->
-<div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm ghost-border flex flex-col group">
+{% for enrollment in enrollments %}
+<div class="course-card bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm ghost-border flex flex-col group" data-category="{{ enrollment.course.category.name|default:'Uncategorized' }}">
 <div class="h-48 relative overflow-hidden">
-<img alt="UI Design Course" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Macro close-up of colorful abstract UI design elements on a screen with smooth depth of field and soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvlGqcUPqk5Ga-0W7NEAw9msTwRdzjAxNWTm6KMXY16kBOoWHoHNuQtmcm5YlAOmsf5QXVf65S9ZtkSxXrGhBBsCl6Zls2w1GCGKL1y2jH0SANGAAGD4tikBCiNenDObP7PgHKPWyQ5ajM_COVKjfeJjUICV30K1O5Nmkk8edRihidQEeETbwkiYgh6gFpF7HN7cxI94sutvC2v5f8QO46Oc2BKecXGA6yegTbLE5OGxWFLalt3AkjcFCkceL8SELqGQK1laxFdw"/>
-<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black tracking-widest text-primary">UI/UX</div>
+{% if enrollment.course.thumbnail %}
+<img alt="{{ enrollment.course.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="{{ enrollment.course.thumbnail.url }}"/>
+{% else %}
+<img alt="{{ enrollment.course.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvlGqcUPqk5Ga-0W7NEAw9msTwRdzjAxNWTm6KMXY16kBOoWHoHNuQtmcm5YlAOmsf5QXVf65S9ZtkSxXrGhBBsCl6Zls2w1GCGKL1y2jH0SANGAAGD4tikBCiNenDObP7PgHKPWyQ5ajM_COVKjfeJjUICV30K1O5Nmkk8edRihidQEeETbwkiYgh6gFpF7HN7cxI94sutvC2v5f8QO46Oc2BKecXGA6yegTbLE5OGxWFLalt3AkjcFCkceL8SELqGQK1laxFdw"/>
+{% endif %}
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black tracking-widest text-primary">{{ enrollment.course.category.name|default:"COURSE"|upper }}</div>
 </div>
 <div class="p-6 flex flex-col flex-grow">
-<h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">Human Interface Guidelines 2024</h3>
-<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">Master the latest principles of digital product design for modern platforms.</p>
+<h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{{ enrollment.course.title }}</h3>
+<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">{{ enrollment.course.short_description|default:""|truncatewords:15 }}</p>
 <div class="mt-auto">
-<div class="flex justify-between text-xs font-bold mb-2">
-<span class="text-primary">Progress</span>
-<span class="text-on-surface-variant">85%</span>
-</div>
-<div class="w-full bg-surface-container-low h-1.5 rounded-full mb-6">
-<div class="bg-primary h-full w-[85%] rounded-full"></div>
-</div>
-<a class="flex items-center justify-between text-sm font-bold text-primary group/link" href="#">
-                                Continue Lesson 14
+<a class="flex items-center justify-between text-sm font-bold text-primary group/link" href="{% url 'courses:course_detail' enrollment.course.slug %}">
+                                Continue Course
                                 <span class="material-symbols-outlined text-lg transition-transform group-hover/link:translate-x-1">arrow_forward</span>
 </a>
 </div>
 </div>
 </div>
-<!-- Course Card 2 -->
-<div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm ghost-border flex flex-col group">
-<div class="h-48 relative overflow-hidden">
-<img alt="Data Analytics Course" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Digital analytics dashboard showing clean line graphs and bar charts on a tablet screen in a bright minimalist office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOKWBcP5XY4bZubSeGYrnL7RuLjkFQgaw4HMSaTjpHNEre1NGlCxyFPT5zGxCoFvm6BPxAfmMcyeFa8qvPWOzrIdMuYi9KjU1OJsIis34qnSXgNP83L4I6J3nFwbXncSuO1NRGvZYGwCWTeaRLSvb0DCGz_PE-ld_DQng9wnW9ql9PSXfEQD4q9OqOY5j5Zq_MUmeb6Ib5SRZuOg5RberdSlpIjYUwv0JJt2LD2COKJMrXrThXWYnmNDD8yovsJGpD47c8WIwpKA"/>
-<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black tracking-widest text-primary">DATA</div>
+{% empty %}
+<div class="col-span-full text-center py-12">
+    <p class="text-on-surface-variant">You are not enrolled in any courses yet.</p>
 </div>
-<div class="p-6 flex flex-col flex-grow">
-<h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">Predictive Modeling Fundamentals</h3>
-<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">Learn to build and deploy machine learning models for real-world business insights.</p>
-<div class="mt-auto">
-<div class="flex justify-between text-xs font-bold mb-2">
-<span class="text-primary">Progress</span>
-<span class="text-on-surface-variant">32%</span>
-</div>
-<div class="w-full bg-surface-container-low h-1.5 rounded-full mb-6">
-<div class="bg-primary h-full w-[32%] rounded-full"></div>
-</div>
-<a class="flex items-center justify-between text-sm font-bold text-primary group/link" href="#">
-                                Start Lesson 4
-                                <span class="material-symbols-outlined text-lg transition-transform group-hover/link:translate-x-1">arrow_forward</span>
-</a>
-</div>
-</div>
-</div>
-<!-- Course Card 3 -->
-<div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm ghost-border flex flex-col group">
-<div class="h-48 relative overflow-hidden">
-<img alt="Management Course" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A diverse group of professionals collaborating around a large wooden table in a high-end modern glass conference room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8aVkqkM26zOUGESkWLgxw4r-ah3D9pCUV4jJ0WELGVXGrOmaGoBoF7VzszDD01UJ0Q4SId-78-RNrO1MVoSutgn440xAgjdJELijMFOfOtX8Z8kbGHXD73mJs_WRILcv6OfM8AcYUq_NoZMYhLJW0XUcpPtCkc-dmH38QQN9XLG7658R-W1y9WcJgootiOIpvnNCRBC20Nh_ddTiLQ8Qx2OrFNIEpdAYohnsgESpp9KmNi5KSUL-VFlrnYs0hf73knHTJyx6u1Q"/>
-<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black tracking-widest text-primary">BUSINESS</div>
-</div>
-<div class="p-6 flex flex-col flex-grow">
-<h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">Strategic Team Leadership</h3>
-<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">Effective communication and decision-making for high-performance creative teams.</p>
-<div class="mt-auto">
-<div class="flex justify-between text-xs font-bold mb-2">
-<span class="text-primary">Progress</span>
-<span class="text-on-surface-variant">0%</span>
-</div>
-<div class="w-full bg-surface-container-low h-1.5 rounded-full mb-6">
-<div class="bg-primary h-full w-0 rounded-full"></div>
-</div>
-<a class="flex items-center justify-between text-sm font-bold text-primary group/link" href="#">
-                                Start First Lesson
-                                <span class="material-symbols-outlined text-lg transition-transform group-hover/link:translate-x-1">arrow_forward</span>
-</a>
-</div>
-</div>
-</div>
+{% endfor %}
 </div>
 </section>
-<!-- Scholarship Margin / Annotation -->
-<aside class="hidden lg:block fixed right-8 top-32 w-64">
-<div class="p-6 rounded-3xl bg-surface-container-low/50 border border-slate-200/50">
-<h4 class="text-xs font-bold uppercase tracking-widest text-on-tertiary-fixed-variant mb-4">Course Notes</h4>
-<div class="space-y-4">
-<div class="border-l-2 border-tertiary pl-4">
-<p class="text-[11px] font-bold text-on-surface mb-1">MAR 12, 10:24 AM</p>
-<p class="text-xs text-on-surface-variant italic leading-relaxed">"Focus on the lighting shadows in module 3, important for the final project."</p>
-</div>
-<div class="border-l-2 border-outline-variant pl-4">
-<p class="text-[11px] font-bold text-on-surface mb-1">MAR 10, 04:15 PM</p>
-<p class="text-xs text-on-surface-variant italic leading-relaxed">"Review grid system documentation before UI exam."</p>
-</div>
-</div>
-<button class="mt-6 w-full py-2 border border-primary text-primary rounded-full text-xs font-bold hover:bg-primary hover:text-white transition-all">Add Annotation</button>
-</div>
-</aside>
 </main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".course-card");
+    const filtersContainer = document.getElementById("dashboard-category-filters");
+    
+    // Extract unique categories
+    const categories = new Set();
+    cards.forEach(card => {
+        if (card.dataset.category && card.dataset.category !== 'None') {
+            categories.add(card.dataset.category);
+        }
+    });
+
+    if (categories.size > 3) {
+        // Render as an interactive custom dropdown menu if there are more than 3 categories
+        filtersContainer.innerHTML = `
+            <div class="relative inline-block text-left" id="custom-category-dropdown">
+                <button type="button" class="inline-flex w-full justify-between items-center gap-3 rounded-full bg-surface-container-high px-5 py-2.5 text-sm font-bold text-on-surface hover:bg-surface-container-highest transition-colors focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                    <span id="selected-category-text">All Categories</span>
+                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                </button>
+
+                <div class="absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-2xl bg-surface-container-lowest shadow-xl border border-outline-variant/15 ring-1 ring-black/5 focus:outline-none hidden overflow-hidden transform opacity-0 scale-95 transition-all duration-200" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" id="dropdown-menu">
+                    <div class="py-2 list-none m-0" role="none">
+                        <button class="dropdown-item w-full text-left block px-5 py-2.5 text-sm text-on-surface hover:bg-primary/10 hover:text-primary transition-colors font-medium border-b border-outline-variant/10" role="menuitem" tabindex="-1" data-value="All">
+                            All Categories
+                        </button>
+                        ${Array.from(categories).map(cat => `
+                            <button class="dropdown-item w-full text-left block px-5 py-2 text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-medium" role="menuitem" tabindex="-1" data-value="${cat}">
+                                ${cat}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const dropdownWrapper = document.getElementById('custom-category-dropdown');
+        const dropdownBtn = document.getElementById('menu-button');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const selectedText = document.getElementById('selected-category-text');
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+        // Toggle dropdown
+        dropdownBtn.addEventListener('click', () => {
+            const isHidden = dropdownMenu.classList.contains('hidden');
+            if (isHidden) {
+                dropdownMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    dropdownMenu.classList.remove('opacity-0', 'scale-95');
+                    dropdownMenu.classList.add('opacity-100', 'scale-100');
+                    dropdownBtn.querySelector('.material-symbols-outlined').style.transform = 'rotate(180deg)';
+                }, 10);
+            } else {
+                closeDropdown();
+            }
+        });
+
+        // Helper to close dropdown with animation
+        function closeDropdown() {
+            dropdownMenu.classList.remove('opacity-100', 'scale-100');
+            dropdownMenu.classList.add('opacity-0', 'scale-95');
+            dropdownBtn.querySelector('.material-symbols-outlined').style.transform = 'rotate(0deg)';
+            setTimeout(() => {
+                dropdownMenu.classList.add('hidden');
+            }, 200);
+        }
+
+        // Close when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!dropdownWrapper.contains(event.target) && !dropdownMenu.classList.contains('hidden')) {
+                closeDropdown();
+            }
+        });
+
+        // Handle item selection and card filtering
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const filterValue = e.currentTarget.dataset.value;
+                selectedText.textContent = e.currentTarget.textContent.trim();
+                
+                cards.forEach(card => {
+                    if (filterValue === "All" || card.dataset.category === filterValue) {
+                        card.style.display = "flex";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+                closeDropdown();
+            });
+        });
+
+    } else {
+        // Render as buttons if 3 or fewer categories
+        categories.forEach(category => {
+            const btn = document.createElement("button");
+            btn.textContent = category;
+            btn.dataset.filter = category;
+            btn.className = "filter-btn whitespace-nowrap shrink-0 px-4 py-2 rounded-full text-on-surface-variant text-sm font-medium hover:bg-surface-container-high transition-colors";
+            filtersContainer.appendChild(btn);
+        });
+
+        const filterButtons = document.querySelectorAll(".filter-btn");
+
+        filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                // Update active state
+                filterButtons.forEach(btn => {
+                    btn.classList.remove("bg-surface-container-high", "text-on-surface");
+                    btn.classList.add("text-on-surface-variant");
+                });
+                button.classList.remove("text-on-surface-variant");
+                button.classList.add("bg-surface-container-high", "text-on-surface");
+
+                // Filter cards
+                const filterValue = button.dataset.filter;
+                cards.forEach(card => {
+                    if (filterValue === "All" || card.dataset.category === filterValue) {
+                        card.style.display = "flex";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+            });
+        });
+    }
+});
+</script>
 {% endblock %}

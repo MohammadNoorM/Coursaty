@@ -73,6 +73,26 @@
         },
       }
     </script>
+<style type="text/tailwindcss">
+        @layer base {
+            input[type='text'],
+            input[type='password'],
+            input[type='email'],
+            input[type='number'],
+            input[type='url'],
+            input[type='date'],
+            input[type='datetime-local'],
+            input[type='month'],
+            input[type='search'],
+            input[type='tel'],
+            input[type='time'],
+            input[type='week'],
+            textarea,
+            select {
+                @apply w-full bg-surface-container-high border-0 border-b border-outline-variant/30 rounded-t px-4 py-3 text-on-surface focus:ring-0 focus:outline-none transition-colors focus:bg-surface-container-highest;
+            }
+        }
+    </style>
 <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -90,6 +110,27 @@
     </style>
 </head>
 <body class="bg-surface font-body text-on-surface selection:bg-secondary-container selection:text-on-secondary-container min-h-screen flex flex-col">
+{% if messages %}
+<div id="messages-container" class="max-w-md mx-auto w-full px-6 mt-4 z-50 absolute top-4 left-1/2 -translate-x-1/2">
+    {% for message in messages %}
+    <div class="message-alert p-4 mb-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-blue-100 text-blue-700{% endif %} shadow-lg flex justify-between items-center transition-opacity duration-500">
+        <span>{{ message }}</span>
+        <button onclick="this.parentElement.style.opacity='0'; setTimeout(() => this.parentElement.remove(), 500);" class="ml-4 opacity-50 hover:opacity-100 focus:outline-none">
+            <span class="material-symbols-outlined text-sm">close</span>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.message-alert');
+        messages.forEach(msg => {
+            msg.style.opacity = '0';
+            setTimeout(() => msg.remove(), 500);
+        });
+    }, 5000);
+</script>
+{% endif %}
 {% block content %}{% endblock %}
 <footer class="w-full py-8 px-6 mt-auto">
 <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
