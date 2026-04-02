@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Avg
-from .models import Course, Lesson, Comment, Enrollment, Category, Rating
+from django.http import JsonResponse
+from .models import Course, Lesson, Comment, Enrollment, Category, Rating, Wishlist
 
 from django.contrib.auth import get_user_model
 
@@ -85,8 +86,10 @@ def course_detail_view(request, slug):
         is_published=True
     )
     is_enrolled = False
+    is_saved = False
     if request.user.is_authenticated:
         is_enrolled = Enrollment.objects.filter(user=request.user, course=course).exists()
+        is_saved = Wishlist.objects.filter(user=request.user, course=course).exists()
         
     student_count = course.enrollments.count()
     rating_count = course.ratings.count()
@@ -106,6 +109,7 @@ def course_detail_view(request, slug):
     return render(request, template_name,
                   {'course': course,
                    'is_enrolled': is_enrolled,
+                   'is_saved': is_saved,
                    'what_you_learn': what_you_learn,
                    'requirements': requirements,
                    'student_count': student_count,
@@ -115,9 +119,13 @@ def course_detail_view(request, slug):
 @login_required
 def dashboard_view(request):
     enrollments = Enrollment.objects.filter(user=request.user).select_related('course')
-    return render(request, 'courses/dashboard.html',
-                  {'enrollments': enrollments
-                   })
+    saved_courses = Wishlist.objects.filter(user=request.user).select_related('course')
+    active_tab = request.GET.get('tab', 'enrolled')
+    return render(request, 'courses/dashboard.html', {
+        'enrollments': enrollments,
+        'saved_courses': saved_courses,
+        'active_tab': active_tab,
+    })
 
 @login_required
 def lesson_view(request, course_slug, lesson_slug):
@@ -159,3 +167,14 @@ def add_comment(request, lesson_id):
                 parent=parent
             )
     return redirect('courses:lesson', course_slug=course.slug, lesson_slug=lesson.slug)
+
+@login_required
+def toggle_wishlist(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+    wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, course=course)
+    if not created:
+        wishlist_item.delete()
+        saved = False
+    else:
+        saved = True
+    return JsonResponse({'saved': saved})

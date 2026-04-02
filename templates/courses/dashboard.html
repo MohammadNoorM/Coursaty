@@ -20,6 +20,20 @@
 </section>
 <!-- Main Course Grid -->
 <section class="mb-20">
+<div class="flex gap-2 border-b border-outline-variant/20 mb-8">
+    <a href="?tab=enrolled"
+       class="px-6 py-3 text-sm font-bold border-b-2 transition-colors
+       {% if active_tab == 'enrolled' %}border-primary text-primary{% else %}border-transparent text-on-surface-variant hover:text-on-surface{% endif %}">
+        My Courses
+    </a>
+    <a href="?tab=saved"
+       class="px-6 py-3 text-sm font-bold border-b-2 transition-colors
+       {% if active_tab == 'saved' %}border-primary text-primary{% else %}border-transparent text-on-surface-variant hover:text-on-surface{% endif %}">
+        Saved
+    </a>
+</div>
+
+{% if active_tab == 'enrolled' %}
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
 <h2 class="text-2xl font-bold text-on-surface shrink-0">All Enrolled Courses</h2>
 <div class="flex flex-wrap gap-2 md:justify-end" id="dashboard-category-filters">
@@ -53,9 +67,40 @@
 {% empty %}
 <div class="col-span-full text-center py-12">
     <p class="text-on-surface-variant">You are not enrolled in any courses yet.</p>
+    <a href="{% url 'courses:course_list' %}" class="text-primary font-bold hover:underline">Browse courses</a>
 </div>
 {% endfor %}
 </div>
+
+{% else %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for item in saved_courses %}
+        <div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm ghost-border flex flex-col group">
+            <div class="h-48 relative overflow-hidden">
+                <img src="{{ item.course.thumbnail.url }}" alt="{{ item.course.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black tracking-widest text-primary">{{ item.course.category.name }}</div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+                <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{{ item.course.title }}</h3>
+                <p class="text-on-surface-variant text-sm mb-6 line-clamp-2">{{ item.course.short_description }}</p>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-lg font-black text-primary">${{ item.course.price }}</span>
+                    <a href="{% url 'courses:course_detail' slug=item.course.slug %}" class="flex items-center gap-1 text-sm font-bold text-primary">
+                        View Course
+                        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-on-surface-variant col-span-3 text-center py-12">
+            No saved courses yet.
+            <a href="{% url 'courses:course_list' %}" class="text-primary font-bold hover:underline">Browse courses</a>
+        </p>
+    {% endfor %}
+</div>
+{% endif %}
+
 </section>
 </main>
 

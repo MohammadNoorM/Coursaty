@@ -166,17 +166,75 @@
 </div>
 
 <div class="flex items-center justify-between mt-auto">
-<div class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors text-on-surface-variant font-bold text-sm">
+<div id="share-btn" class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors text-on-surface-variant font-bold text-sm">
 <span class="material-symbols-outlined">share</span>
 <span>Share</span>
 </div>
-<div class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors text-on-surface-variant font-bold text-sm">
-<span class="material-symbols-outlined">bookmark</span>
-<span>Save</span>
+<div id="wishlist-btn" data-url="{% url 'courses:toggle_wishlist' course_slug=course.slug %}" class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors text-on-surface-variant font-bold text-sm select-none">
+<span class="material-symbols-outlined transition-all" style="font-variation-settings: 'FILL' {% if is_saved %}1{% else %}0{% endif %};">bookmark</span>
+<span>{% if is_saved %}Saved{% else %}Save{% endif %}</span>
 </div>
 </div>
 </div>
 </div>
 </div>
 </main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const shareBtn = document.getElementById('share-btn');
+if (shareBtn) {
+  shareBtn.addEventListener('click', async () => {
+    const shareData = {
+      title: '{{ course.title|escapejs }}',
+      text: '{{ course.short_description|escapejs }}',
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log('Share cancelled');
+      }
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      const label = shareBtn.querySelector('span:last-child');
+      label.textContent = 'Copied!';
+      setTimeout(() => {
+        label.textContent = 'Share';
+      }, 2000);
+    }
+  });
+}
+
+const btn = document.getElementById('wishlist-btn');
+if (btn) {
+  btn.addEventListener('click', () => {
+    if (!{{ user.is_authenticated|yesno:"true,false" }}) {
+      window.location.href = "{% url 'accounts:login' %}";
+      return;
+    }
+    fetch(btn.dataset.url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(res => res.json())
+    .then(data => {
+      const icon = btn.querySelector('.material-symbols-outlined');
+      const label = btn.querySelector('span:last-child');
+      if (data.saved) {
+        icon.style.fontVariationSettings = "'FILL' 1";
+        if (label) label.textContent = 'Saved';
+      } else {
+        icon.style.fontVariationSettings = "'FILL' 0";
+        if (label) label.textContent = 'Save';
+      }
+    });
+  });
+}
+</script>
 {% endblock %}

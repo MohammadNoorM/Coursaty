@@ -101,3 +101,15 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.user} on {self.lesson}'
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='wishlist')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='wishlisted_by')
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'course')
+
+    def __str__(self):
+        return f'{self.user} saved {self.course}'
