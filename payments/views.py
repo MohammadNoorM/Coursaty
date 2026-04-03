@@ -32,8 +32,8 @@ def create_checkout_session(request, course_slug):
             'quantity': 1,
         }],
         mode='payment',
-        success_url=request.build_absolute_uri(f'/payments/success/?session_id={{CHECKOUT_SESSION_ID}}'),
-        cancel_url=request.build_absolute_uri(f'/payments/cancel/'),
+        success_url=request.build_absolute_uri('/payments/success/') + '?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url=request.build_absolute_uri('/payments/cancel/'),
         metadata={
             'user_id': request.user.id,
             'course_id': course.id,
