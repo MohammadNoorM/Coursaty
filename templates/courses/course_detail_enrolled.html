@@ -87,9 +87,15 @@
 <div class="flex items-center justify-between mb-6">
 <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Enrolled</span>
 </div>
+{% if course.sections.first.lessons.first %}
 <a href="{% url 'courses:lesson' course.slug course.sections.first.lessons.first.slug %}" class="block text-center w-full signature-gradient text-white py-4 rounded-lg font-bold text-lg mb-4 hover:opacity-90 active:scale-95 transition-all">
                                 Go to course
                             </a>
+{% else %}
+<button disabled class="block text-center w-full bg-surface-variant text-on-surface-variant py-4 rounded-lg font-bold text-lg mb-4 cursor-not-allowed opacity-70">
+                                No lessons available
+                            </button>
+{% endif %}
 <button class="w-full bg-surface-container-high text-on-primary-fixed-variant py-4 rounded-lg font-bold transition-all hover:bg-surface-container-highest">
                                 Download Resources
                             </button>

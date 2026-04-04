@@ -2,7 +2,18 @@ from django.db import models
 from autoslug import AutoSlugField
 from autoslug.utils import slugify as default_slugify
 from django.conf import settings
+from cloudinary_storage.storage import VideoMediaCloudinaryStorage
+import cloudinary.uploader
+import os
 import re
+
+class ChunkedVideoCloudinaryStorage(VideoMediaCloudinaryStorage):
+    def _upload(self, name, content):
+        options = {'use_filename': True, 'resource_type': self._get_resource_type(name), 'tags': self.TAG}
+        folder = os.path.dirname(name)
+        if folder:
+            options['folder'] = folder
+        return cloudinary.uploader.upload_large(content, **options)
 
 def custom_slugify(value):
     value = re.sub(r'[^a-zA-Z0-9\s-]', '', value)
@@ -54,7 +65,7 @@ class Section(models.Model):
 class Lesson(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='lessons')
     title = models.CharField(max_length=200)
-    video = models.FileField(upload_to='courses/videos/')
+    video = models.FileField(upload_to='courses/videos/', storage=ChunkedVideoCloudinaryStorage())
     duration = models.DurationField(null=True, blank=True)
     order = models.PositiveIntegerField(default=0)
     slug = AutoSlugField(populate_from='title', unique=True)
