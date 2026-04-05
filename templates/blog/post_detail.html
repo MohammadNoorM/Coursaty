@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} | LearnHub{% endblock %}
+
+{% block content %}
+<main class="pt-24 pb-20">
+<header class="max-w-4xl mx-auto px-6 mb-12">
+<div class="mb-8">
+<h1 class="text-5xl md:text-6xl font-extrabold text-on-surface tracking-tighter leading-tight mb-6">{{ post.title }}</h1>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary/20 flex items-center justify-center text-primary font-bold text-xl">
+    {{ post.author.username|make_list|first|upper }}
+</div>
+<div>
+<p class="font-bold text-on-surface leading-none">{{ post.author.get_full_name|default:post.author.username }}</p>
+<p class="text-sm text-outline mt-1">{{ post.created_at|date:"M d, Y" }}</p>
+</div>
+</div>
+{% if user == post.author %}
+<div class="flex gap-3">
+    <a href="{% url 'blog:post_edit' slug=post.slug %}" class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-surface-container-highest transition-colors">Edit</a>
+    <a href="{% url 'blog:post_delete' slug=post.slug %}" class="bg-error text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:opacity-90 transition-opacity">Delete</a>
+</div>
+{% endif %}
+</div>
+</div>
+{% if post.cover_image %}
+<div class="rounded-xl overflow-hidden shadow-sm">
+<img alt="{{ post.title }}" class="w-full aspect-[21/9] object-cover" src="{{ post.cover_image.url }}">
+</div>
+{% endif %}
+</header>
+<article class="max-w-3xl mx-auto px-6">
+<div class="space-y-8 text-lg leading-relaxed text-on-surface-variant font-body">
+{{ post.body|linebreaks }}
+</div>
+</article>
+</main>
+{% endblock %}
