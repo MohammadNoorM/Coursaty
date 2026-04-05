@@ -37,17 +37,6 @@
 {% endfor %}
 </div>
 </div>
-<!-- Instructor Info -->
-<div class="bg-surface-container-low p-6 rounded-lg">
-<h4 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-4">Instructor</h4>
-<div class="flex items-center gap-4">
-<img class="w-12 h-12 rounded-full object-cover" data-alt="portrait of a professional architect in a minimal studio setting, soft cinematic lighting, high end editorial style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW2CxC_X0rZn7BXgIa9S_lxWZ5Cbnj_tIgz3qscp_8r6d7idziN5faLUpN3va5_rvXY1c6khe85qMTToB_MPcfJavlcvdS6pwuHMl7kNAICFmVcnJqpeJ2l5w56HZmrn72HKmcMD0zMeb7aQirciyuN0-BKmnttRlTTgCHZZG5bYnHvzC-qBvD2Sqtbk9gzHL2xPWDTPugXP0q5ysAWfGhbJymt-usaaCbaSLVjdnovtmunbDY1IopwPXTneERKF_v_bErPbgAFg"/>
-<div>
-<p class="text-sm font-bold text-on-surface">Dr. Julian Vance</p>
-<p class="text-xs text-on-surface-variant">Senior Design Lead</p>
-</div>
-</div>
-</div>
 </div>
 </aside>
 <!-- Main Content Area -->
@@ -72,12 +61,11 @@
 <p class="text-on-surface-variant leading-relaxed">{{ lesson.description|default:"" }}</p>
 </div>
 <div class="flex gap-3">
-<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-full text-sm font-bold hover:bg-surface-container-highest transition-colors">
-<span class="material-symbols-outlined text-sm">download</span> Resources
-                        </button>
-<button class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-full text-sm font-bold shadow-md hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 active:scale-95 transform transition-all">
+{% if next_lesson %}
+<a href="{% url 'courses:lesson' course.slug next_lesson.slug %}" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-full text-sm font-bold shadow-md hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 active:scale-95 transform transition-all">
                             Next Lesson <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</button>
+</a>
+{% endif %}
 </div>
 </div>
 </section>

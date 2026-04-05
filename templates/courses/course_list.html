@@ -4,13 +4,18 @@
 {% block content %}
 <main class="pt-24 pb-20 px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
 <!-- Sidebar Filters -->
-<aside class="w-full md:w-72 flex-shrink-0">
-<div class="sticky top-28 space-y-10">
-<div>
-<h3 class="text-on-surface font-bold text-lg mb-6 flex items-center gap-2">
+<aside id="filter-sidebar" class="w-full md:w-72 flex-shrink-0 transition-all duration-300">
+<div class="sticky top-28">
+<div class="flex items-center justify-between mb-6">
+<h3 id="filter-title" class="text-on-surface font-bold text-lg flex items-center gap-2">
 <span class="material-symbols-outlined text-primary" data-icon="filter_list">filter_list</span>
             Filters
           </h3>
+<button onclick="document.getElementById('filter-content').classList.toggle('hidden'); document.getElementById('filter-sidebar').classList.toggle('md:w-72'); document.getElementById('filter-sidebar').classList.toggle('md:w-12'); document.getElementById('filter-title').classList.toggle('hidden'); document.getElementById('course-grid').classList.toggle('lg:grid-cols-2'); document.getElementById('course-grid').classList.toggle('lg:grid-cols-3');" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-surface-container-high" title="Toggle Filters">
+    <span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+<div id="filter-content" class="space-y-10">
 <div class="space-y-8">
 <form method="GET" action="{% url 'courses:course_list' %}" class="mb-8">
   <div class="relative">
@@ -65,7 +70,7 @@
 </div>
 </aside>
 <!-- Main Course Grid -->
-<div class="flex-1">
+<div class="flex-1 w-full">
 <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
 <div>
 <h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">Academic Excellence</h1>
@@ -87,11 +92,17 @@
 </form>
 </header>
 <!-- Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div id="course-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8 transition-all duration-300">
 {% for course in courses %}
 <a href="{% url 'courses:course_detail' course.slug %}" class="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-on-surface/5 transition-all duration-300 flex flex-col block">
 <div class="relative h-56 overflow-hidden">
-<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-alt="{{ course.title }}" src="{% if course.thumbnail %}{{ course.thumbnail.url }}{% endif %}"/>
+{% if course.thumbnail %}
+<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-alt="{{ course.title }}" src="{{ course.thumbnail.url }}"/>
+{% else %}
+<div class="w-full h-full bg-surface-container-high flex items-center justify-center">
+    <span class="material-symbols-outlined text-4xl text-outline">image</span>
+</div>
+{% endif %}
 <div class="absolute top-4 left-4 flex gap-2">
 <span class="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">{{ course.category.name }}</span>
 </div>
@@ -118,7 +129,7 @@
             </div>
             <div class="flex items-center gap-2 text-on-surface-variant text-xs font-medium">
                 <span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
-                12h total
+                {{ course.total_duration }} total
             </div>
         </div>
     </div>

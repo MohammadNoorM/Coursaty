@@ -7,10 +7,7 @@
 <section class="relative overflow-hidden bg-surface py-20 lg:py-32">
 <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 <div class="lg:col-span-7 z-10">
-<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed mb-6">
-<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-<span class="text-xs font-bold tracking-wider uppercase font-label">New Semester Open</span>
-</div>
+
 <h1 class="text-5xl lg:text-7xl font-black text-on-surface tracking-tight leading-[1.1] mb-8">
                         Unlock Your Potential <br/>with Our <span class="text-primary">Video Courses</span>
 </h1>
@@ -28,25 +25,25 @@
 </div>
 <div class="mt-12 flex items-center gap-6">
 <div class="flex -space-x-3">
-<img class="w-10 h-10 rounded-full border-2 border-surface" data-alt="portrait of a smiling young woman with dark hair in a professional setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVtPSQKnylA3iJiaRB9juIP2FdlWJXOA6JsIOZSd8AG5L0x9ROwd0pr8UGwECXiEvoYtIW1BodYxhV8xWSJL56oW21hTisxp8EtA0EFL_n2tQCOxZjw1QE0Zcz2HQqgIqhvlIxJhtdAhPI7ja-aWCs2R_KwDWTjhmPZnZdXWooZiOlhiwadT5l1fczjSdB8kXc55y674DQBASvhSUJ9zKl7wPF9fgxnv10C1U2ogKvSqPyv1J-ORqqblF2UmA3PCfV4BEDIBnsUg"/>
+<img class="w-10 h-10 rounded-full border-2 border-surface" data-alt="headshot of a man with spectacles looking thoughtful against a soft blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW2CxC_X0rZn7BXgIa9S_lxWZ5Cbnj_tIgz3qscp_8r6d7idziN5faLUpN3va5_rvXY1c6khe85qMTToB_MPcfJavlcvdS6pwuHMl7kNAICFmVcnJqpeJ2l5w56HZmrn72HKmcMD0zMeb7aQirciyuN0-BKmnttRlTTgCHZZG5bYnHvzC-qBvD2Sqtbk9gzHL2xPWDTPugXP0q5ysAWfGhbJymt-usaaCbaSLVjdnovtmunbDY1IopwPXTneERKF_v_bErPbgAFg"/>
 <img class="w-10 h-10 rounded-full border-2 border-surface" data-alt="headshot of a man with spectacles looking thoughtful against a soft blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGPqphL-XZz6jT-1ffeTNVCq0R-H76G9vEtLLCItTcwZ06j-ZnMVgoeEur8DvaRshAPqOQ74lVhEEWruu8b-qPb5VulK7XUOGAHzgS-c8nDh82xKy9jlFTwkIECTsD4SlsXxQuO0A0dzk9vmjEazSnYcp84ONWe77-7EmMpXw0OewHlI6rwq3HcVIafCpJS0iDB2_gX8zbGcZloA7a8vmVlzbVDSSIsOG20Tr7q9K0bFIzFaQN97QhTVKb52T1sV0GnvWMvJbF8g"/>
-<img class="w-10 h-10 rounded-full border-2 border-surface" data-alt="portrait of a woman with a friendly expression in a modern office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-fA63qW8mInbpbRoclEeekcqrssZZOn7Ejcb9EcQFnYyM3hXYsoWuFY8D5GR0KXWMbnxzz-d-NDx1GT_87rHKsJbAS3RFyaHJt3ZaZ0dRzRujJVDhWgy2-8LIqkzZjN3E7exgpzTCmnOWaqSSSRQ_QTq6a8i5-4EjtcfbCoW6rKwU0KaEPx_KE7BOMsTh5ZGTnWp2umeHKsaOMTjWL3LxoOB_Sz8BxIrFBECJLujHy_iHY6REOpldPZPFmDCVaqoGAm9Or74MMA"/>
+<img class="w-10 h-10 rounded-full border-2 border-surface" data-alt="headshot of a man with spectacles looking thoughtful against a soft blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW2CxC_X0rZn7BXgIa9S_lxWZ5Cbnj_tIgz3qscp_8r6d7idziN5faLUpN3va5_rvXY1c6khe85qMTToB_MPcfJavlcvdS6pwuHMl7kNAICFmVcnJqpeJ2l5w56HZmrn72HKmcMD0zMeb7aQirciyuN0-BKmnttRlTTgCHZZG5bYnHvzC-qBvD2Sqtbk9gzHL2xPWDTPugXP0q5ysAWfGhbJymt-usaaCbaSLVjdnovtmunbDY1IopwPXTneERKF_v_bErPbgAFg"/>
 </div>
 <p class="text-sm font-medium text-on-surface-variant">
-<span class="text-on-surface font-bold">12k+</span> students joined this month
+<span class="text-on-surface font-bold">{{ learner_count }}</span> students joined this month
                         </p>
 </div>
 </div>
 <div class="lg:col-span-5 relative">
 <div class="absolute -top-20 -right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
 <div class="relative bg-surface-container-lowest p-4 rounded-lg shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-500">
-<img class="rounded-lg w-full aspect-[4/5] object-cover" data-alt="clean modern workspace with a laptop showing educational video content and a coffee cup on the side" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5TR3mNFreD6vCknRgtAwlF_pV8NLxSLXwN7CbbF3XOljZvkC17muAnWC0e2CiL8nVY3yHfAZlh67Bwqy1TqgIUW274OCxho87vcDAwzBvmVwYmrfAp2E6PPZ77UdA5pjKfrTNPp8DerIETdkaaTaAd_AqMyhTAf2ioDKKrBOW6lBulEbkfMoEPyYHeQtxsk8XiPCfpOqHoWh4FOivN1N8BSNdgll3Ajmx-dODiKpJZm2yHz7xZTysl5xpGJ1AQJsTsAIR2yrwlA"/>
+<img class="rounded-lg w-full aspect-[4/5] object-cover" data-alt="person using laptop" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop"/>
 <div class="absolute -left-10 bottom-10 bg-white p-6 rounded-2xl shadow-xl max-w-[200px] animate-pulse">
 <div class="flex items-center gap-2 mb-2">
 <span class="material-symbols-outlined text-tertiary">star</span>
-<span class="font-bold text-on-surface">4.9/5 Rating</span>
+<span class="font-bold text-on-surface">{{ avg_rating|floatformat:1 }}/5 Rating</span>
 </div>
-<p class="text-xs text-on-surface-variant">Based on 2,400+ reviews from worldwide scholars.</p>
+<p class="text-xs text-on-surface-variant">Based on {{ rating_count }} review{{ rating_count|pluralize }} from worldwide scholars.</p>
 </div>
 </div>
 </div>
@@ -89,16 +86,19 @@
 {% for course in featured_courses %}
 <a href="{% url 'courses:course_detail' course.slug %}" class="group bg-surface-container-lowest rounded-lg overflow-hidden border border-outline-variant/15 hover:shadow-2xl transition-all duration-300 block">
 <div class="relative overflow-hidden aspect-video">
-<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="{{ course.title }}" src="{% if course.thumbnail %}{{ course.thumbnail.url }}{% endif %}"/>
+{% if course.thumbnail %}
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="{{ course.title }}" src="{{ course.thumbnail.url }}"/>
+{% else %}
+<div class="w-full h-full bg-surface-container-high flex items-center justify-center">
+    <span class="material-symbols-outlined text-4xl text-outline">image</span>
+</div>
+{% endif %}
 <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter text-primary">{{ course.category.name }}</div>
 </div>
 <div class="p-8 flex flex-col h-full">
 <div class="flex items-center gap-2 mb-3 text-on-surface-variant">
 <span class="material-symbols-outlined text-[18px]">schedule</span>
-<span class="text-xs font-bold">12 Hours</span>
-<span class="mx-1">•</span>
-<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
-<span class="text-xs font-bold">Advanced</span>
+<span class="text-xs font-bold">{{ course.total_duration }}</span>
 </div>
 <h3 class="text-xl font-bold text-on-surface mb-3 group-hover:text-primary transition-colors leading-tight">{{ course.title }}</h3>
 <p class="text-sm text-on-surface-variant mb-6 line-clamp-2 flex-grow">{{ course.short_description }}</p>
@@ -126,7 +126,11 @@
 <h2 class="text-4xl lg:text-5xl font-black text-white mb-6 leading-tight">Ready to start your scholarly journey?</h2>
 <p class="text-on-primary-container text-lg opacity-90 mb-8">Join thousands of students and professionals who are leveling up their skills with LearnHub's premium curriculum.</p>
 <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+{% if user.is_authenticated %}
+<a href="{% url 'courses:course_list' %}" class="bg-white text-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-opacity-90 transition-all active:scale-95 shadow-xl">See Courses</a>
+{% else %}
 <a href="{% url 'accounts:register' %}" class="bg-white text-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-opacity-90 transition-all active:scale-95 shadow-xl">Get Started</a>
+{% endif %}
 <button class="border border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-all active:scale-95">Blog</button>
 </div>
 </div>

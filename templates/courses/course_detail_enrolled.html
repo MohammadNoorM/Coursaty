@@ -79,7 +79,13 @@
 <!-- Enrollment Status Card -->
 <div class="bg-surface-container-lowest rounded-lg overflow-hidden border border-outline-variant/15 shadow-sm">
 <div class="aspect-video relative">
-<img class="w-full h-full object-cover" data-alt="{{ course.title }}" src="{% if course.thumbnail %}{{ course.thumbnail.url }}{% endif %}"/>
+{% if course.thumbnail %}
+<img class="w-full h-full object-cover" data-alt="{{ course.title }}" src="{{ course.thumbnail.url }}"/>
+{% else %}
+<div class="w-full h-full bg-surface-container-high flex items-center justify-center">
+    <span class="material-symbols-outlined text-4xl text-outline">image</span>
+</div>
+{% endif %}
 <div class="absolute inset-0 bg-primary/20 flex items-center justify-center">
 </div>
 </div>
@@ -88,7 +94,7 @@
 <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Enrolled</span>
 </div>
 {% if course.sections.first.lessons.first %}
-<a href="{% url 'courses:lesson' course.slug course.sections.first.lessons.first.slug %}" class="block text-center w-full signature-gradient text-white py-4 rounded-lg font-bold text-lg mb-4 hover:opacity-90 active:scale-95 transition-all">
+<a href="{% url 'courses:lesson' course.slug course.sections.first.lessons.first.slug %}" class="block text-center w-full bg-primary signature-gradient text-white py-4 rounded-lg font-bold text-lg mb-4 hover:opacity-90 active:scale-95 transition-all">
                                 Go to course
                             </a>
 {% else %}
@@ -96,9 +102,6 @@
                                 No lessons available
                             </button>
 {% endif %}
-<button class="w-full bg-surface-container-high text-on-primary-fixed-variant py-4 rounded-lg font-bold transition-all hover:bg-surface-container-highest">
-                                Download Resources
-                            </button>
 <div class="mt-8 space-y-4">
 <div class="flex items-center gap-3 text-sm">
 <span class="material-symbols-outlined text-primary text-[20px]">verified</span>
@@ -111,20 +114,6 @@
 <div class="flex items-center gap-3 text-sm">
 <span class="material-symbols-outlined text-primary text-[20px]">devices</span>
 <span class="text-on-surface">Access on mobile and TV</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Instructor Highlight -->
-<div class="p-8 bg-surface-container-low rounded-lg">
-<h4 class="text-label-md font-bold text-on-surface-variant uppercase tracking-widest mb-6">Lead Instructor</h4>
-<div class="flex items-center gap-4">
-<div class="w-16 h-16 rounded-lg overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="professional portrait of an architect in a black turtleneck with glasses in a minimalist studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoP8IbmrA-o92207j3_rJWMCn_v6QEAQQrfPuaTIbucl_mJb-8Qv88jF8ROowjIH2Pjp7zUhr7IpO6v5wvCoQwnMqKrK2mtLHhGjq1432Uzzz8keU_qcFYaYj3XMgJILn65Z-1xcIXXyY_zU-T8A6KF2iW20IzwGkcIM_CBohKZRpFHauvI5pVG1sBhwF-aiALoR4Yv5XhL37TgoHQo-UJwxA4ZluTxHfRJVPlVqrWezzyT4eAo3qAyeBJe7UPgDnRSRSNKIh6FQ"/>
-</div>
-<div>
-<p class="font-bold text-on-surface">Dr. Marcus Thorne</p>
-<p class="text-sm text-on-surface-variant">Principal at Thorne Studios</p>
 </div>
 </div>
 </div>

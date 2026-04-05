@@ -16,7 +16,8 @@ def home_view(request):
     lesson_count = Lesson.objects.filter(section__course__is_published=True).count()
     learner_count = get_user_model().objects.filter(is_active=True).count()
     
-    avg_rating = Rating.objects.aggregate(avg=Avg('score'))['avg']
+    avg_rating = Rating.objects.aggregate(avg=Avg('score'))['avg'] or 0.0
+    rating_count = Rating.objects.count()
     success_rate = int((avg_rating / 5) * 100) if avg_rating else 100
     
     return render(request, 'courses/home.html',
@@ -26,6 +27,8 @@ def home_view(request):
                    'lesson_count': lesson_count,
                    'learner_count': learner_count,
                    'success_rate': success_rate,
+                   'avg_rating': avg_rating,
+                   'rating_count': rating_count,
                    })
 
 def course_list_view(request):
@@ -59,7 +62,7 @@ def course_list_view(request):
     elif sort_by == 'price_low':
         courses = courses.order_by('price')
 
-    paginator = Paginator(courses, 8) # 8 courses per page
+    paginator = Paginator(courses, 12) # 12 courses per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
@@ -139,11 +142,19 @@ def lesson_view(request, course_slug, lesson_slug):
     lesson = get_object_or_404(Lesson, slug=lesson_slug, section__course=course)
     comments = Comment.objects.filter(lesson=lesson, parent=None).prefetch_related('replies__user').select_related('user')
 
+    all_lessons = list(Lesson.objects.filter(section__course=course).select_related('section').order_by('section__order', 'order'))
+    try:
+        current_index = all_lessons.index(lesson)
+        next_lesson = all_lessons[current_index + 1]
+    except (ValueError, IndexError):
+        next_lesson = None
+
     return render(request, 'courses/lesson.html',
                   {'course': course,
                    'lesson': lesson,
-                     'comments': comments
-                     })
+                   'comments': comments,
+                   'next_lesson': next_lesson
+                   })
 
 @login_required
 def add_comment(request, lesson_id):

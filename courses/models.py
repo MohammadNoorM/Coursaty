@@ -49,6 +49,19 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def total_duration(self):
+        from datetime import timedelta
+        total = timedelta()
+        for section in self.sections.all():
+            for lesson in section.lessons.all():
+                if lesson.duration:
+                    total += lesson.duration
+        hours, remainder = divmod(int(total.total_seconds()), 3600)
+        minutes = remainder // 60
+        if hours:
+            return f'{hours}h {minutes}m'
+        return f'{minutes}m'
 
 class Section(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='sections')
@@ -72,6 +85,32 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.video and not self.duration:
+            try:
+                import tempfile
+                import requests
+                from moviepy.video.io.VideoFileClip import VideoFileClip
+                from datetime import timedelta
+
+                video_url = self.video.url
+                response = requests.get(video_url)
+                with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as tmp:
+                    tmp.write(response.content)
+                    tmp_path = tmp.name
+
+                clip = VideoFileClip(tmp_path)
+                self.duration = timedelta(seconds=int(clip.duration))
+                clip.close()
+
+                import os
+                os.unlink(tmp_path)
+
+                Lesson.objects.filter(pk=self.pk).update(duration=self.duration)
+            except Exception as e:
+                print(f'Could not extract duration: {e}')
 
     class Meta:
         ordering = ['order']
