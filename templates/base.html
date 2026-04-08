@@ -1,10 +1,12 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 
-<html class="light" lang="en"><head>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}" class="light"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>{% block title %}LearnHub{% endblock %}</title>
+<title>{% block title %}Coursaty{% endblock %}</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -12,6 +14,9 @@
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
+        future: {
+          hoverOnlyWhenSupported: true,
+        },
         theme: {
           extend: {
             colors: {
@@ -71,6 +76,7 @@
             borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
           },
         },
+        plugins: [],
       }
     </script>
 <style type="text/tailwindcss">
@@ -110,22 +116,38 @@
 <body class="bg-surface font-body text-on-surface antialiased">
 <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm dark:shadow-none font-['Inter'] font-medium text-sm antialiased">
 <div class="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
-<a class="text-2xl font-black tracking-tighter text-blue-700 dark:text-blue-500" href="{% url 'courses:home' %}">LearnHub</a>
-<div class="hidden md:flex items-center space-x-8">
-<a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors" href="{% url 'courses:course_list' %}">Courses</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors" href="{% url 'blog:post_list' %}">Blog</a>
+<a class="text-2xl font-black tracking-tighter text-blue-700 dark:text-blue-500" href="{% url 'courses:home' %}">Coursaty</a>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors" href="{% url 'courses:course_list' %}">{% trans "Courses" %}</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors" href="{% url 'blog:post_list' %}">{% trans "Blog" %}</a>
 </div>
-<div class="flex items-center space-x-4">
-<button class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-all duration-200 active:scale-95 transform">
-<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">language</span>
-</button>
+<div class="flex items-center gap-4">
+{% get_current_language as LANGUAGE_CODE %}
+<div class="relative">
+  <button id="lang-btn" class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-all duration-200 active:scale-95 transform flex items-center gap-1">
+    <span class="material-symbols-outlined text-slate-600 dark:text-slate-400">language</span>
+    <span class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">{{ LANGUAGE_CODE }}</span>
+  </button>
+  <div id="lang-dropdown" class="hidden absolute right-0 rtl:right-auto rtl:left-0 top-12 bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden w-36 z-50">
+    <form action="{% url 'set_language' %}" method="POST">
+      {% csrf_token %}
+      <input name="next" type="hidden" value="{{ request.path }}"/>
+      <button class="w-full px-4 py-3 text-left rtl:text-right text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center gap-2" name="language" type="submit" value="en">
+        <span class="text-base">en</span> English
+      </button>
+      <button class="w-full px-4 py-3 text-left rtl:text-right text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center gap-2" name="language" type="submit" value="ar">
+        <span class="text-base">ar</span> العربية
+      </button>
+    </form>
+  </div>
+</div>
 <div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
 {% if user.is_authenticated %}
-<a href="{% url 'courses:dashboard' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium">Hello, {{ user.username }}</a>
-<a href="{% url 'accounts:logout' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">Logout</a>
+<a href="{% url 'courses:dashboard' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium">{% trans "Hello," %} {{ user.username }}</a>
+<a href="{% url 'accounts:logout' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">{% trans "Logout" %}</a>
 {% else %}
-<a href="{% url 'accounts:login' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium">Login</a>
-<a href="{% url 'accounts:register' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">Register</a>
+<a href="{% url 'accounts:login' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium">{% trans "Login" %}</a>
+<a href="{% url 'accounts:register' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">{% trans "Register" %}</a>
 {% endif %}
 </div>
 </div>
@@ -135,7 +157,7 @@
     {% for message in messages %}
     <div class="message-alert p-4 mb-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-blue-100 text-blue-700{% endif %} shadow-sm flex justify-between items-center transition-opacity duration-500">
         <span>{{ message }}</span>
-        <button onclick="this.parentElement.style.opacity='0'; setTimeout(() => this.parentElement.remove(), 500);" class="ml-4 opacity-50 hover:opacity-100 focus:outline-none">
+        <button onclick="this.parentElement.style.opacity='0'; setTimeout(() => this.parentElement.remove(), 500);" class="ml-4 rtl:ml-0 rtl:mr-4 opacity-50 hover:opacity-100 focus:outline-none">
             <span class="material-symbols-outlined text-sm">close</span>
         </button>
     </div>
@@ -156,9 +178,9 @@
 <footer class="w-full mt-auto border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 font-['Inter'] text-sm leading-relaxed">
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-8 py-12 max-w-7xl mx-auto">
 <div>
-<div class="text-xl font-bold text-slate-900 dark:text-white mb-6">Learnub</div>
-<p class="text-slate-500 dark:text-slate-400 mb-6">Empowering the next generation of scholars through high-fidelity video education and world-class curricula.</p>
-<div class="flex space-x-4">
+<div class="text-xl font-bold text-slate-900 dark:text-white mb-6">Coursaty</div>
+<p class="text-slate-500 dark:text-slate-400 mb-6">{% trans "Empowering the next generation of scholars through high-fidelity video education and world-class curricula." %}</p>
+<div class="flex gap-4">
 <a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">
 <span class="material-symbols-outlined">public</span>
 </a>
@@ -171,31 +193,45 @@
 </div>
 </div>
 <div class="md:col-span-1">
-<div class="font-bold text-slate-900 dark:text-white mb-6">Explore</div>
+<div class="font-bold text-slate-900 dark:text-white mb-6">{% trans "Top Categories" %}</div>
 <ul class="space-y-4">
-<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:translate-x-1 transition-all duration-200 inline-block" href="#">About Us</a></li>
-<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:translate-x-1 transition-all duration-200 inline-block" href="#">Terms of Service</a></li>
-<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:translate-x-1 transition-all duration-200 inline-block" href="#">Privacy Policy</a></li>
-<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:translate-x-1 transition-all duration-200 inline-block" href="#">Contact Support</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:ltr:translate-x-1 hover:rtl:-translate-x-1 transition-all duration-200 inline-block" href="{% url 'courses:course_list' %}?category=development">{% trans "Web Development" %}</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:ltr:translate-x-1 hover:rtl:-translate-x-1 transition-all duration-200 inline-block" href="{% url 'courses:course_list' %}?category=data-science">{% trans "Data Science" %}</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:ltr:translate-x-1 hover:rtl:-translate-x-1 transition-all duration-200 inline-block" href="{% url 'courses:course_list' %}?category=design">{% trans "Design" %}</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:ltr:translate-x-1 hover:rtl:-translate-x-1 transition-all duration-200 inline-block" href="{% url 'courses:course_list' %}?category=business">{% trans "Business" %}</a></li>
 </ul>
 </div>
 <div>
-<div class="font-bold text-slate-900 dark:text-white mb-6">Newsletter</div>
-<p class="text-slate-500 dark:text-slate-400 mb-4">Get the latest course updates and educational insights.</p>
-<form class="flex flex-col gap-2">
-<input class="bg-white dark:bg-slate-800 border-none rounded-full px-4 py-3 text-sm focus:ring-2 focus:ring-blue-600" placeholder="email@example.com" type="email"/>
-<button class="primary-gradient text-white font-bold py-3 rounded-full active:scale-95 transition-transform">Subscribe</button>
-</form>
+<div class="font-bold text-slate-900 dark:text-white mb-6">{% trans "Company" %}</div>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:ltr:translate-x-1 hover:rtl:-translate-x-1 transition-all duration-200 inline-block" href="#">{% trans "About Us" %}</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:ltr:translate-x-1 hover:rtl:-translate-x-1 transition-all duration-200 inline-block" href="{% url 'blog:post_list' %}">{% trans "Our Blog" %}</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:ltr:translate-x-1 hover:rtl:-translate-x-1 transition-all duration-200 inline-block" href="#">{% trans "Privacy Policy" %}</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:ltr:translate-x-1 hover:rtl:-translate-x-1 transition-all duration-200 inline-block" href="#">{% trans "Terms of Service" %}</a></li>
+</ul>
 </div>
 </div>
 <div class="max-w-7xl mx-auto px-8 py-6 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center text-slate-400 text-xs">
-<div>© 2024 LearnHub. All rights reserved.</div>
+<div>&copy; {% now "Y" %} {% trans "Coursaty. All rights reserved." %}</div>
 <div class="mt-4 md:mt-0 flex gap-6">
-<span>Designed with Precision</span>
-<span>Version 2.4.0</span>
+<span>{% trans "Designed with Precision" %}</span>
 </div>
 </div>
 </footer>
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+<script>
+const langBtn = document.getElementById('lang-btn');
+const langDropdown = document.getElementById('lang-dropdown');
+if (langBtn) {
+  langBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    langDropdown.classList.toggle('hidden');
+  });
+  document.addEventListener('click', () => {
+    langDropdown.classList.add('hidden');
+  });
+}
+</script>
+{% endblock %}
 </body>
 </html>

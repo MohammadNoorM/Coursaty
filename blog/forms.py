@@ -1,7 +1,13 @@
 from django import forms
 from .models import Post
+from django.utils.translation import gettext_lazy as _
 
 class PostForm(forms.ModelForm):
+    title = forms.CharField(label=_('Title'), max_length=200)
+    cover_image = forms.ImageField(label=_('Cover Image'), required=False)
+    excerpt = forms.CharField(label=_('Excerpt'), max_length=300)
+    body = forms.CharField(label=_('Body'), widget=forms.Textarea)
+
     class Meta:
         model = Post
         fields = ['title', 'cover_image', 'excerpt', 'body']

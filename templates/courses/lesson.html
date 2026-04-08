@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}LearnHub - Advanced Architectural Design{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Coursaty - Advanced Architectural Design" %}{% endblock %}
 
 {% block content %}
 <main class="pt-20 pb-12 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -7,18 +8,18 @@
 <aside class="lg:col-span-3 order-2 lg:order-1">
 <div class="sticky top-24 space-y-6">
 <div class="bg-surface-container-low p-6 rounded-lg">
-<h3 class="text-label-md font-bold uppercase tracking-wider text-on-surface-variant mb-6">Course Curriculum</h3>
+<h3 class="text-label-md font-bold uppercase tracking-wider text-on-surface-variant mb-6">{% trans "Course Curriculum" %}</h3>
 <div class="space-y-4">
 {% for section in course.sections.all %}
 <details class="group" {% if lesson in section.lessons.all %}open{% elif forloop.first %}open{% endif %}>
 <summary class="flex items-center justify-between mb-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden focus:outline-none group-hover:text-primary transition-colors">
 <span class="text-xs font-bold text-tertiary">{{ section.title|upper }}</span>
 <div class="flex items-center gap-2">
-  <span class="text-xs text-on-surface-variant">{{ section.lessons.count }} Lessons</span>
+  <span class="text-xs text-on-surface-variant">{{ section.lessons.count }} {% trans "Lessons" %}</span>
   <span class="material-symbols-outlined text-on-surface-variant text-sm transition-transform duration-300 group-open:-rotate-180">expand_more</span>
 </div>
 </summary>
-<div class="space-y-1 pl-2 border-l-2 border-outline-variant/20 mt-2">
+<div class="space-y-1 pl-2 rtl:pl-0 rtl:pr-2 border-l-2 rtl:border-l-0 rtl:border-r-2 border-outline-variant/20 mt-2">
 {% for l in section.lessons.all %}
 {% if l == lesson %}
 <a class="flex items-center gap-3 p-3 text-sm text-blue-700 font-bold bg-surface-container-lowest editorial-shadow rounded-lg group" href="{% url 'courses:lesson' course.slug l.slug %}">
@@ -47,11 +48,11 @@
 {% if lesson.video %}
 <video class="w-full h-full object-cover" controls controlsList="nodownload">
     <source src="{{ lesson.video.url }}" type="video/mp4">
-    Your browser does not support the video tag.
+    {% trans "Your browser does not support the video tag." %}
 </video>
 {% else %}
 <div class="absolute inset-0 flex items-center justify-center">
-    <p class="text-white">Video not available</p>
+    <p class="text-white">{% trans "Video not available" %}</p>
 </div>
 {% endif %}
 </div>
@@ -63,7 +64,7 @@
 <div class="flex gap-3">
 {% if next_lesson %}
 <a href="{% url 'courses:lesson' course.slug next_lesson.slug %}" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-full text-sm font-bold shadow-md hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 active:scale-95 transform transition-all">
-                            Next Lesson <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            {% trans "Next Lesson" %} <span class="material-symbols-outlined text-sm">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}arrow_back{% else %}arrow_forward{% endif %}</span>
 </a>
 {% endif %}
 </div>
@@ -72,11 +73,11 @@
 <!-- Comments Section -->
 <section class="pt-8 border-t border-outline-variant/30">
 <div class="flex items-center justify-between mb-8">
-<h2 class="text-headline-sm font-bold text-on-surface">Community Discourse <span class="text-on-surface-variant font-normal text-lg ml-2">({{ comments.count }})</span></h2>
+<h2 class="text-headline-sm font-bold text-on-surface">{% trans "Community Discourse" %} <span class="text-on-surface-variant font-normal text-lg ml-2 rtl:ml-0 rtl:mr-2">({{ comments.count }})</span></h2>
 <div class="flex items-center gap-2 text-sm font-medium text-on-surface-variant">
-<span>Sort by:</span>
-<select class="bg-transparent border-none focus:ring-0 text-sm font-bold text-blue-700 p-0 pr-6">
-<option>Latest</option>
+<span>{% trans "Sort by:" %}</span>
+<select class="bg-transparent border-none focus:ring-0 text-sm font-bold text-blue-700 p-0 ltr:pr-6 rtl:pl-6 rtl:pr-0 bg-[position:right_center] rtl:bg-[position:left_center]">
+<option>{% trans "Latest" %}</option>
 </select>
 </div>
 </div>
@@ -85,9 +86,9 @@
 <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold shrink-0">{{ request.user.username|make_list|first|upper }}</div>
 <form method="POST" action="{% url 'courses:add_comment' lesson.id %}" class="flex-1 space-y-3">
 {% csrf_token %}
-<textarea name="body" class="w-full bg-surface-container-low border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-primary focus:bg-white min-h-[100px] transition-all" placeholder="Synthesize your thoughts on this lesson..." required></textarea>
+<textarea name="body" class="w-full bg-surface-container-low border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-primary focus:bg-white min-h-[100px] transition-all" placeholder="{% trans 'Synthesize your thoughts on this lesson...' %}" required></textarea>
 <div class="flex justify-end">
-<button type="submit" class="bg-surface-container-high text-on-primary-fixed-variant px-6 py-2 rounded-full text-sm font-bold hover:bg-primary-container hover:text-white transition-all">Post Commentary</button>
+<button type="submit" class="bg-surface-container-high text-on-primary-fixed-variant px-6 py-2 rounded-full text-sm font-bold hover:bg-primary-container hover:text-white transition-all">{% trans "Post Commentary" %}</button>
 </div>
 </form>
 </div>
@@ -101,33 +102,33 @@
 <div class="flex-1">
 <div class="flex items-center gap-3 mb-1">
 <span class="text-sm font-bold text-on-surface">{{ comment.user.username }}</span>
-<span class="text-xs text-on-surface-variant">{{ comment.created_at|timesince }} ago</span>
+<span class="text-xs text-on-surface-variant">{{ comment.created_at|timesince }} {% trans "ago" %}</span>
 </div>
 <p class="text-sm text-on-surface-variant leading-relaxed mb-3">{{ comment.body }}</p>
 <div class="flex items-center gap-4">
-<button class="text-xs font-bold text-on-surface-variant hover:text-blue-600 reply-toggle" data-comment-id="{{ comment.id }}">Reply</button>
+<button class="text-xs font-bold text-on-surface-variant hover:text-blue-600 reply-toggle" data-comment-id="{{ comment.id }}">{% trans "Reply" %}</button>
 </div>
 
 <!-- Reply Form (Hidden by default) -->
 <form method="POST" action="{% url 'courses:add_comment' lesson.id %}" class="hidden mt-4 space-y-3 reply-form" id="reply-form-{{ comment.id }}">
 {% csrf_token %}
 <input type="hidden" name="parent_id" value="{{ comment.id }}">
-<textarea name="body" class="w-full bg-surface-container-low border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary focus:bg-white min-h-[60px] transition-all" placeholder="Write a reply..." required></textarea>
+<textarea name="body" class="w-full bg-surface-container-low border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary focus:bg-white min-h-[60px] transition-all" placeholder="{% trans 'Write a reply...' %}" required></textarea>
 <div class="flex justify-end">
-<button type="submit" class="bg-surface-container-high text-sm px-4 py-1.5 rounded-full font-bold hover:bg-primary-container hover:text-white transition-all">Post Reply</button>
+<button type="submit" class="bg-surface-container-high text-sm px-4 py-1.5 rounded-full font-bold hover:bg-primary-container hover:text-white transition-all">{% trans "Post Reply" %}</button>
 </div>
 </form>
 
 <!-- Nested Replies -->
 {% if comment.replies.all %}
-<div class="mt-6 pl-6 border-l-2 border-outline-variant/30 space-y-6">
+<div class="mt-6 pl-6 rtl:pl-0 rtl:pr-6 border-l-2 rtl:border-l-0 rtl:border-r-2 border-outline-variant/30 space-y-6">
 {% for reply in comment.replies.all %}
 <div class="flex gap-4">
 <div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed text-xs font-bold shrink-0">{{ reply.user.username|make_list|first|upper }}</div>
 <div class="flex-1">
 <div class="flex items-center gap-3 mb-1">
 <span class="text-sm font-bold text-on-surface">{{ reply.user.username }}</span>
-<span class="text-xs text-on-surface-variant">{{ reply.created_at|timesince }} ago</span>
+<span class="text-xs text-on-surface-variant">{{ reply.created_at|timesince }} {% trans "ago" %}</span>
 </div>
 <p class="text-sm text-on-surface-variant leading-relaxed">{{ reply.body }}</p>
 </div>
@@ -138,7 +139,7 @@
 </div>
 </div>
 {% empty %}
-<p class="text-on-surface-variant text-sm text-center">No comments yet. Start the discussion!</p>
+<p class="text-on-surface-variant text-sm text-center">{% trans "No comments yet. Start the discussion!" %}</p>
 {% endfor %}
 </div>
 </section>

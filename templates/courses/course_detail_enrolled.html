@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}{{ course.title }} | LearnHub{% endblock %}
+{% load i18n %}
+{% block title %}{{ course.title }} | {% trans "Coursaty" %}{% endblock %}
 
 {% block content %}
 <main class="pt-24 pb-20 px-6 max-w-7xl mx-auto">
@@ -9,7 +10,7 @@
 <!-- Course Breadcrumb & Hero -->
 <nav class="flex items-center gap-2 text-label-sm font-bold uppercase tracking-wider text-on-surface-variant mb-6">
 <span>{{ course.category.name }}</span>
-<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="material-symbols-outlined text-[14px]">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}chevron_left{% else %}chevron_right{% endif %}</span>
 <span class="text-primary">{{ course.title }}</span>
 </nav>
 <h1 class="text-[3.5rem] font-black leading-[1.1] tracking-tighter text-on-surface mb-8">
@@ -24,26 +25,26 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16">
 <div class="bg-surface-container-lowest p-6 border border-outline-variant/15 rounded-lg">
 <span class="material-symbols-outlined text-tertiary mb-4">account_tree</span>
-<h3 class="text-lg font-bold mb-2">Systems Integration</h3>
-<p class="text-sm text-on-surface-variant">Learn to unify HVAC, structural frames, and aesthetic facades into a single coherent organism.</p>
+<h3 class="text-lg font-bold mb-2">{% trans "Systems Integration" %}</h3>
+<p class="text-sm text-on-surface-variant">{% trans "Learn to unify HVAC, structural frames, and aesthetic facades into a single coherent organism." %}</p>
 </div>
 <div class="bg-surface-container-lowest p-6 border border-outline-variant/15 rounded-lg">
 <span class="material-symbols-outlined text-primary mb-4">eco</span>
-<h3 class="text-lg font-bold mb-2">Passive Strategies</h3>
-<p class="text-sm text-on-surface-variant">Advanced thermal dynamics and natural ventilation mapping for net-zero architectural targets.</p>
+<h3 class="text-lg font-bold mb-2">{% trans "Passive Strategies" %}</h3>
+<p class="text-sm text-on-surface-variant">{% trans "Advanced thermal dynamics and natural ventilation mapping for net-zero architectural targets." %}</p>
 </div>
 <div class="bg-surface-container-lowest p-6 border border-outline-variant/15 rounded-lg md:col-span-2 flex items-center gap-8">
 <div class="hidden sm:block w-32 h-32 bg-secondary-container/20 rounded-lg flex-shrink-0">
 <img class="w-full h-full object-cover rounded-lg" data-alt="high-end architectural skyscraper facade with intricate glass and steel structural patterns in soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdn23JfPtMXqon0XBz7XjdpXE8-_of7dXu1_neBmQmzeesJahp0NhFWSHkIn_9OiWZDKGh5r8yuKg1oznS27hlV0UPymON5mxwrwbsw1U7kiobmm5iuo5t9uc-lRx230_kyt4E6r17vzzrV7aPvXokAfssQ5mHMmRcyTmdRJVz9EnFKrhJ52U2GJxf0bDDgvV7OGWh411Vm8heT9f9pjLVOLNBYNtF3eN-993WqmYl8eXVvTBFfxYsBBFBYZvp8EnJixXRyKwagQ"/>
 </div>
 <div>
-<h3 class="text-lg font-bold mb-2">Parametric Modeling Workshops</h3>
-<p class="text-sm text-on-surface-variant">Hands-on sessions using computational design tools to solve real-world engineering constraints.</p>
+<h3 class="text-lg font-bold mb-2">{% trans "Parametric Modeling Workshops" %}</h3>
+<p class="text-sm text-on-surface-variant">{% trans "Hands-on sessions using computational design tools to solve real-world engineering constraints." %}</p>
 </div>
 </div>
 </div>
 <!-- Curriculum List -->
-<h2 class="text-2xl font-bold mb-8">Course Curriculum</h2>
+<h2 class="text-2xl font-bold mb-8">{% trans "Course Curriculum" %}</h2>
 <div class="space-y-4">
 {% for section in course.sections.all %}
 <details class="group rounded-lg bg-surface-container-low overflow-hidden" {% if forloop.first %}open{% endif %}>
@@ -91,29 +92,29 @@
 </div>
 <div class="p-8">
 <div class="flex items-center justify-between mb-6">
-<span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Enrolled</span>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">{% trans "Enrolled" %}</span>
 </div>
 {% if course.sections.first.lessons.first %}
 <a href="{% url 'courses:lesson' course.slug course.sections.first.lessons.first.slug %}" class="block text-center w-full bg-primary signature-gradient text-white py-4 rounded-lg font-bold text-lg mb-4 hover:opacity-90 active:scale-95 transition-all">
-                                Go to course
+                                {% trans "Go to course" %}
                             </a>
 {% else %}
 <button disabled class="block text-center w-full bg-surface-variant text-on-surface-variant py-4 rounded-lg font-bold text-lg mb-4 cursor-not-allowed opacity-70">
-                                No lessons available
+                                {% trans "No lessons available" %}
                             </button>
 {% endif %}
 <div class="mt-8 space-y-4">
 <div class="flex items-center gap-3 text-sm">
 <span class="material-symbols-outlined text-primary text-[20px]">verified</span>
-<span class="text-on-surface">Professional Certification</span>
+<span class="text-on-surface">{% trans "Professional Certification" %}</span>
 </div>
 <div class="flex items-center gap-3 text-sm">
 <span class="material-symbols-outlined text-primary text-[20px]">indeterminate_question_box</span>
-<span class="text-on-surface">Lifetime access</span>
+<span class="text-on-surface">{% trans "Lifetime access" %}</span>
 </div>
 <div class="flex items-center gap-3 text-sm">
 <span class="material-symbols-outlined text-primary text-[20px]">devices</span>
-<span class="text-on-surface">Access on mobile and TV</span>
+<span class="text-on-surface">{% trans "Access on mobile and TV" %}</span>
 </div>
 </div>
 </div>

@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Avg
 from django.http import JsonResponse
 from .models import Course, Lesson, Comment, Enrollment, Category, Rating, Wishlist
+from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth import get_user_model
 
@@ -136,7 +137,7 @@ def lesson_view(request, course_slug, lesson_slug):
 
     # Access control — must be enrolled
     if not Enrollment.objects.filter(user=request.user, course=course).exists():
-        messages.error(request, "You must purchase this course to access lessons.")
+        messages.error(request, _("You must purchase this course to access lessons."))
         return redirect('courses:course_detail', slug=course_slug)
     
     lesson = get_object_or_404(Lesson, slug=lesson_slug, section__course=course)
@@ -163,7 +164,7 @@ def add_comment(request, lesson_id):
 
     # Must be enrolled to comment
     if not Enrollment.objects.filter(user=request.user, course=course).exists():
-        messages.error(request, "You must be enrolled to comment.")
+        messages.error(request, _("You must be enrolled to comment."))
         return redirect('courses:course_detail', slug=course.slug)
     
     if request.method == 'POST':

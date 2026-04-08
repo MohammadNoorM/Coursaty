@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterForm
+from django.utils.translation import gettext_lazy as _
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -12,7 +13,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, 'Your account has been created successfully.')
+            messages.success(request, _('Your account has been created successfully.'))
             return redirect('courses:home')
     else:
         form = RegisterForm()
@@ -30,12 +31,12 @@ def login_view(request):
             next_url = request.GET.get('next', 'courses:home')
             return redirect(next_url)
         else:
-            messages.error(request, 'Invalid username or password.')
+            messages.error(request, _('Invalid username or password.'))
     else:
         form = AuthenticationForm()
     return render(request, 'accounts/login.html', {'form': form})
 
 def logout_view(request):
     logout(request)
-    messages.success(request, 'You have been logged out.')
+    messages.success(request, _('You have been logged out.'))
     return redirect('courses:home')

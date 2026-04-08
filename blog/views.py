@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from .models import Post
 from .forms import PostForm
+from django.utils.translation import gettext_lazy as _
 
 def post_list(request):
     if request.user.is_authenticated and request.GET.get('mine'):
@@ -37,7 +38,7 @@ def post_create(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            messages.success(request, 'Post created successfully!')
+            messages.success(request, _('Post created successfully!'))
             return redirect('blog:post_detail', slug=post.slug)
     else:
         form = PostForm()
@@ -50,7 +51,7 @@ def post_edit(request, slug):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Post updated successfully!')
+            messages.success(request, _('Post updated successfully!'))
             return redirect('blog:post_detail', slug=post.slug)
     else:
         form = PostForm(instance=post)
@@ -61,6 +62,6 @@ def post_delete(request, slug):
     post = get_object_or_404(Post, slug=slug, author=request.user)
     if request.method == 'POST':
         post.delete()
-        messages.success(request, 'Post deleted.')
+        messages.success(request, _('Post deleted.'))
         return redirect('blog:post_list')
     return render(request, 'blog/post_confirm_delete.html', {'post': post})

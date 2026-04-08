@@ -1,5 +1,6 @@
-{% extends 'base_minimal.html' %}
-{% block title %}Payment Status - LearnHub{% endblock %}
+﻿{% extends 'base_minimal.html' %}
+{% load i18n %}
+{% block title %}{% trans "Payment Status - Coursaty" %}{% endblock %}
 
 {% block content %}
 <main class="flex-grow flex items-center justify-center p-6 md:p-12">
@@ -13,14 +14,14 @@
 <div class="mb-8 p-6 bg-emerald-50 dark:bg-emerald-950/30 rounded-full inline-flex items-center justify-center">
 <span class="material-symbols-outlined text-emerald-600 !text-6xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
 </div>
-<h1 class="font-headline text-3xl font-extrabold tracking-tight mb-4 text-on-surface">Payment Successful</h1>
+<h1 class="font-headline text-3xl font-extrabold tracking-tight mb-4 text-on-surface">{% trans "Payment Successful" %}</h1>
 <p class="text-on-surface-variant mb-10 max-w-sm leading-relaxed">
-                        Your enrollment in <span class="font-semibold text-primary">{{ course.title }}</span> is confirmed. Get ready to transform your learning journey.
+                        {% trans "Your enrollment in" %} <span class="font-semibold text-primary">{{ course.title }}</span> {% trans "is confirmed. Get ready to transform your learning journey." %}
                     </p>
 <a href="{% url 'courses:course_detail' course.slug %}" class="w-full text-center py-4 signature-texture text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all duration-200 block">
-                        Go to Course
+                        {% trans "Go to Course" %}
                     </a>
-<p class="mt-6 text-sm text-on-surface-variant/70 italic">A receipt has been sent to your email.</p>
+<p class="mt-6 text-sm text-on-surface-variant/70 italic">{% trans "A receipt has been sent to your email." %}</p>
 </div>
 </div>
 {% elif status == 'cancel' %}
@@ -31,13 +32,13 @@
 <div class="mb-8 p-6 bg-error-container/30 rounded-full inline-flex items-center justify-center">
 <span class="material-symbols-outlined text-error !text-6xl" data-icon="cancel" style="font-variation-settings: 'FILL' 1;">cancel</span>
 </div>
-<h1 class="font-headline text-3xl font-extrabold tracking-tight mb-4 text-on-surface">Payment Cancelled</h1>
+<h1 class="font-headline text-3xl font-extrabold tracking-tight mb-4 text-on-surface">{% trans "Payment Cancelled" %}</h1>
 <p class="text-on-surface-variant mb-10 max-w-sm leading-relaxed">
-                        The transaction was cancelled and you haven't been charged. If this was a mistake, you can try the payment again.
+                        {% trans "The transaction was cancelled and you haven't been charged. If this was a mistake, you can try the payment again." %}
                     </p>
 <div class="mt-auto w-full flex flex-col gap-3">
 <a href="{% url 'courses:home' %}" class="w-full text-center py-4 signature-texture text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all duration-200 block">
-                            Back to Courses
+                            {% trans "Back to Courses" %}
                         </a>
 </div>
 </div>

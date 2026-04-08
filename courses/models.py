@@ -6,6 +6,7 @@ from cloudinary_storage.storage import VideoMediaCloudinaryStorage
 import cloudinary.uploader
 import os
 import re
+from django.utils.translation import gettext_lazy as _
 
 class ChunkedVideoCloudinaryStorage(VideoMediaCloudinaryStorage):
     def _upload(self, name, content):
@@ -28,7 +29,8 @@ class Category(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Categories'
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
 
 class Course(models.Model):
@@ -52,6 +54,7 @@ class Course(models.Model):
     @property
     def total_duration(self):
         from datetime import timedelta
+        from django.utils.translation import gettext
         total = timedelta()
         for section in self.sections.all():
             for lesson in section.lessons.all():
@@ -60,8 +63,12 @@ class Course(models.Model):
         hours, remainder = divmod(int(total.total_seconds()), 3600)
         minutes = remainder // 60
         if hours:
-            return f'{hours}h {minutes}m'
-        return f'{minutes}m'
+            return gettext('%(hours)dh %(minutes)dm') % {'hours': hours, 'minutes': minutes}
+        return gettext('%(minutes)dm') % {'minutes': minutes}
+
+    class Meta:
+        verbose_name = _('Course')
+        verbose_name_plural = _('Courses')
 
 class Section(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='sections')
@@ -72,6 +79,8 @@ class Section(models.Model):
         return self.title
 
     class Meta:
+        verbose_name = _('Section')
+        verbose_name_plural = _('Sections')
         ordering = ['order']
 
 
@@ -113,8 +122,9 @@ class Lesson(models.Model):
                 print(f'Could not extract duration: {e}')
 
     class Meta:
+        verbose_name = _('Lesson')
+        verbose_name_plural = _('Lessons')
         ordering = ['order']
-
 
 class Enrollment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='enrollments')
@@ -125,8 +135,9 @@ class Enrollment(models.Model):
         return f'{self.user} enrolled in {self.course}'
 
     class Meta:
+        verbose_name = _('Enrollment')
+        verbose_name_plural = _('Enrollments')
         unique_together = ('user', 'course')
-
 
 class Rating(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ratings')
@@ -139,15 +150,19 @@ class Rating(models.Model):
         return f'{self.user} rated {self.course} - {self.score}/5'
 
     class Meta:
+        verbose_name = _('Rating')
+        verbose_name_plural = _('Ratings')
         unique_together = ('user', 'course')
-
-
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='comments')
     body = models.TextField()
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
     created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name = _('Comment')
+        verbose_name_plural = _('Comments')
+
 
     def __str__(self):
         return f'Comment by {self.user} on {self.lesson}'
@@ -159,6 +174,8 @@ class Wishlist(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = _('Wishlist')
+        verbose_name_plural = _('Wishlists')
         unique_together = ('user', 'course')
 
     def __str__(self):

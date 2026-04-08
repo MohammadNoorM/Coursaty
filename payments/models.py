@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from courses.models import Course
+from django.utils.translation import gettext_lazy as _
 
 
 class Payment(models.Model):
@@ -19,3 +20,7 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.course} - {self.status}'
+
+    class Meta:
+        verbose_name = _('Payment')
+        verbose_name_plural = _('Payments')

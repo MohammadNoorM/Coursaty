@@ -7,6 +7,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from courses.models import Course, Enrollment
 from .models import Payment
+from django.utils.translation import gettext_lazy as _
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -16,7 +17,7 @@ def create_checkout_session(request, course_slug):
 
     # Already enrolled? Go straight to course detail page
     if Enrollment.objects.filter(user=request.user, course=course).exists():
-        messages.info(request, 'You are already enrolled in this course.')
+        messages.info(request, _('You are already enrolled in this course.'))
         return redirect('courses:course_detail', slug=course_slug)
 
     session = stripe.checkout.Session.create(
@@ -59,13 +60,13 @@ def payment_success(request):
     if payment and payment.status == 'completed':
         return render(request, 'payments/payment.html', {'course': payment.course, 'status': 'success'})
     
-    messages.error(request, 'Payment not confirmed yet. Please wait a moment.')
+    messages.error(request, _('Payment not confirmed yet. Please wait a moment.'))
     return redirect('courses:home')
 
 
 @login_required
 def payment_cancel(request):
-    messages.warning(request, 'Payment was cancelled. You can try again.')
+    messages.warning(request, _('Payment was cancelled. You can try again.'))
     return render(request, 'payments/payment.html', {'status': 'cancel'})
 
 @csrf_exempt

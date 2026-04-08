@@ -1,5 +1,6 @@
-{% extends 'base.html' %}
-{% block title %}{{ post.title }} | LearnHub{% endblock %}
+﻿{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{{ post.title }} | {% trans "Coursaty" %}{% endblock %}
 
 {% block content %}
 <main class="pt-24 pb-20">
@@ -18,8 +19,8 @@
 </div>
 {% if user == post.author %}
 <div class="flex gap-3">
-    <a href="{% url 'blog:post_edit' slug=post.slug %}" class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-surface-container-highest transition-colors">Edit</a>
-    <a href="{% url 'blog:post_delete' slug=post.slug %}" class="bg-error text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:opacity-90 transition-opacity">Delete</a>
+    <a href="{% url 'blog:post_edit' slug=post.slug %}" class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-surface-container-highest transition-colors">{% trans "Edit" %}</a>
+    <a href="{% url 'blog:post_delete' slug=post.slug %}" class="bg-error text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:opacity-90 transition-opacity">{% trans "Delete" %}</a>
 </div>
 {% endif %}
 </div>

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}Courses | LearnHub{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Courses" %} | Coursaty{% endblock %}
 
 {% block content %}
 <main class="pt-24 pb-20 px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
@@ -9,7 +10,7 @@
 <div class="flex items-center justify-between mb-6">
 <h3 id="filter-title" class="text-on-surface font-bold text-lg flex items-center gap-2">
 <span class="material-symbols-outlined text-primary" data-icon="filter_list">filter_list</span>
-            Filters
+            {% trans "Filters" %}
           </h3>
 <button onclick="document.getElementById('filter-content').classList.toggle('hidden'); document.getElementById('filter-sidebar').classList.toggle('md:w-72'); document.getElementById('filter-sidebar').classList.toggle('md:w-12'); document.getElementById('filter-title').classList.toggle('hidden'); document.getElementById('course-grid').classList.toggle('lg:grid-cols-2'); document.getElementById('course-grid').classList.toggle('lg:grid-cols-3');" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-surface-container-high" title="Toggle Filters">
     <span class="material-symbols-outlined">tune</span>
@@ -19,8 +20,8 @@
 <div class="space-y-8">
 <form method="GET" action="{% url 'courses:course_list' %}" class="mb-8">
   <div class="relative">
-    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">search</span>
-    <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search courses..." class="w-full !pl-12 pr-4 py-3 rounded-lg bg-surface-container-low border-none text-sm font-semibold focus:ring-primary/20 text-on-surface">
+    <span class="material-symbols-outlined absolute left-4 rtl:left-auto rtl:right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">search</span>
+    <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="{% trans 'Search courses...' %}" class="w-full ltr:!pl-12 ltr:pr-4 rtl:!pr-12 rtl:pl-4 py-3 rounded-lg bg-surface-container-low border-none text-sm font-semibold focus:ring-primary/20 text-on-surface">
     {% if selected_category %}
       <input type="hidden" name="category" value="{{ selected_category }}">
     {% endif %}
@@ -35,11 +36,11 @@
 
 <!-- Categories Section -->
 <section>
-<label class="text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant mb-4 block">Categories</label>
+<label class="text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant mb-4 block">{% trans "Categories" %}</label>
 <div class="space-y-3">
 <a href="{% url 'courses:course_list' %}?{% if search_query %}q={{ search_query }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="flex items-center gap-3 cursor-pointer group">
 <input type="radio" name="category_filter" class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary/20" {% if not selected_category %}checked{% endif %} disabled/>
-<span class="text-sm {% if not selected_category %}text-primary font-bold{% else %}text-on-surface-variant group-hover:text-primary{% endif %} transition-colors">All Categories</span>
+<span class="text-sm {% if not selected_category %}text-primary font-bold{% else %}text-on-surface-variant group-hover:text-primary{% endif %} transition-colors">{% trans "All Categories" %}</span>
 </a>
 {% for category in categories %}
 <a href="{% url 'courses:course_list' %}?category={{ category.slug }}{% if search_query %}&q={{ search_query }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="flex items-center gap-3 cursor-pointer group">
@@ -51,7 +52,7 @@
 </section>
 <!-- Rating Section -->
 <section>
-<label class="text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant mb-4 block">Minimum Rating</label>
+<label class="text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant mb-4 block">{% trans "Minimum Rating" %}</label>
 <div class="space-y-2">
 <form method="GET" action="{% url 'courses:course_list' %}" id="rating-form">
   {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
@@ -73,20 +74,20 @@
 <div class="flex-1 w-full">
 <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
 <div>
-<h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">Academic Excellence</h1>
-<p class="text-on-surface-variant text-lg">Browse {{ page_obj.paginator.count }} professional courses curated by experts.</p>
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">{% trans "Academic Excellence" %}</h1>
+<p class="text-on-surface-variant text-lg">{% blocktrans count count=page_obj.paginator.count %}Browse {{ count }} professional course curated by experts.{% plural %}Browse {{ count }} professional courses curated by experts.{% endblocktrans %}</p>
 </div>
 <form method="GET" action="{% url 'courses:course_list' %}">
 {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
 {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
 {% if min_rating %}<input type="hidden" name="rating" value="{{ min_rating }}">{% endif %}
 <div class="flex items-center gap-3">
-<span class="text-sm font-medium text-on-surface-variant">Sort by:</span>
-<select name="sort" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-sm font-semibold focus:ring-primary/20 text-on-surface pr-10">
-<option value="relevant" {% if sort_by == 'relevant' or not sort_by %}selected{% endif %}>Most Relevant</option>
-<option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest First</option>
-<option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Highest Rated</option>
-<option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+<span class="text-sm font-medium text-on-surface-variant">{% trans "Sort by:" %}</span>
+<select name="sort" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-sm font-semibold focus:ring-primary/20 text-on-surface ltr:pr-10 rtl:pl-10 rtl:pr-3 bg-[position:right_0.75rem_center] rtl:bg-[position:left_0.75rem_center]">
+<option value="relevant" {% if sort_by == 'relevant' or not sort_by %}selected{% endif %}>{% trans "Most Relevant" %}</option>
+<option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>{% trans "Newest First" %}</option>
+<option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>{% trans "Highest Rated" %}</option>
+<option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>{% trans "Price: Low to High" %}</option>
 </select>
 </div>
 </form>
@@ -103,7 +104,7 @@
     <span class="material-symbols-outlined text-4xl text-outline">image</span>
 </div>
 {% endif %}
-<div class="absolute top-4 left-4 flex gap-2">
+<div class="absolute top-4 left-4 rtl:left-auto rtl:right-4 flex gap-2">
 <span class="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">{{ course.category.name }}</span>
 </div>
 </div>
@@ -124,18 +125,18 @@
                 <div class="flex items-center text-on-surface-variant opacity-70">
                     <span class="material-symbols-outlined text-[18px]" data-icon="star">star</span>
                 </div>
-                <span class="text-xs font-bold text-on-surface-variant opacity-80">New</span>
+                <span class="text-xs font-bold text-on-surface-variant opacity-80">{% trans "New" %}</span>
                 {% endif %}
             </div>
             <div class="flex items-center gap-2 text-on-surface-variant text-xs font-medium">
                 <span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
-                {{ course.total_duration }} total
+                {{ course.total_duration }} {% trans "total" %}
             </div>
         </div>
     </div>
 </a>
 {% empty %}
-<p>No courses found.</p>
+<p>{% trans "No courses found." %}</p>
 {% endfor %}
 </div>
 
@@ -144,11 +145,11 @@
 <nav class="mt-16 flex items-center justify-center gap-2">
 {% if page_obj.has_previous %}
 <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
-<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+<span class="material-symbols-outlined" data-icon="chevron_left">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}chevron_right{% else %}chevron_left{% endif %}</span>
 </a>
 {% else %}
 <button class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant/50 cursor-not-allowed transition-colors" disabled>
-<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+<span class="material-symbols-outlined" data-icon="chevron_left">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}chevron_right{% else %}chevron_left{% endif %}</span>
 </button>
 {% endif %}
 
@@ -164,11 +165,11 @@
 
 {% if page_obj.has_next %}
 <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
-<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined" data-icon="chevron_right">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}chevron_left{% else %}chevron_right{% endif %}</span>
 </a>
 {% else %}
 <button class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant/50 cursor-not-allowed transition-colors" disabled>
-<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined" data-icon="chevron_right">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}chevron_left{% else %}chevron_right{% endif %}</span>
 </button>
 {% endif %}
 </nav>

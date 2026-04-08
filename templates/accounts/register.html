@@ -1,31 +1,32 @@
 {% extends 'base_minimal.html' %}
-{% block title %}Register | LearnHub{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Register | Coursaty" %}{% endblock %}
 
 {% block content %}
 <main class="flex-grow flex items-center justify-center px-6 py-12 relative overflow-hidden">
 <!-- Background Architectural Elements -->
-<div class="absolute top-0 right-0 w-1/2 h-full bg-surface-container-low -skew-x-12 translate-x-1/4 z-0"></div>
-<div class="absolute bottom-10 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl z-0"></div>
+<div class="absolute top-0 right-0 rtl:right-auto rtl:left-0 w-1/2 h-full bg-surface-container-low ltr:-skew-x-12 rtl:skew-x-12 ltr:translate-x-1/4 rtl:-translate-x-1/4 z-0"></div>
+<div class="absolute bottom-10 left-10 rtl:left-auto rtl:right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl z-0"></div>
 <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-0 bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/10 overflow-hidden relative z-10">
 <!-- Left Side: Editorial Image/Branding -->
 <div class="hidden md:flex md:col-span-5 signature-texture p-12 flex-col justify-between text-on-primary">
 <div>
-<div class="text-3xl font-black tracking-tighter mb-8">LearnHub</div>
-<h1 class="text-4xl font-headline font-bold leading-tight tracking-tight mb-4">Master new skills with precision.</h1>
-<p class="text-on-primary-container/80 text-lg leading-relaxed">Join a community of scholars and professionals dedicated to high-impact learning.</p>
+<div class="text-3xl font-black tracking-tighter mb-8">{% trans "Coursaty" %}</div>
+<h1 class="text-4xl font-headline font-bold leading-tight tracking-tight mb-4">{% trans "Master new skills with precision." %}</h1>
+<p class="text-on-primary-container/80 text-lg leading-relaxed">{% trans "Join a community of scholars and professionals dedicated to high-impact learning." %}</p>
 </div>
 <div class="mt-12">
 <div class="flex items-center gap-4 mb-6">
 <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
 <span class="material-symbols-outlined">auto_stories</span>
 </div>
-<span class="text-sm font-medium">Curated Course Paths</span>
+<span class="text-sm font-medium">{% trans "Curated Course Paths" %}</span>
 </div>
 <div class="flex items-center gap-4">
 <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
 <span class="material-symbols-outlined">workspace_premium</span>
 </div>
-<span class="text-sm font-medium">Verified Certifications</span>
+<span class="text-sm font-medium">{% trans "Verified Certifications" %}</span>
 </div>
 </div>
 <div class="mt-auto pt-12">
@@ -35,8 +36,8 @@
 <!-- Right Side: Registration Form -->
 <div class="col-span-1 md:col-span-7 p-8 md:p-16 lg:p-20 bg-surface-container-lowest">
 <div class="mb-10">
-<h2 class="text-3xl font-headline font-bold text-on-surface mb-2">Create Account</h2>
-<p class="text-on-surface-variant">Enter your details to begin your journey.</p>
+<h2 class="text-3xl font-headline font-bold text-on-surface mb-2">{% trans "Create Account" %}</h2>
+<p class="text-on-surface-variant">{% trans "Enter your details to begin your journey." %}</p>
 </div>
 <form method="POST" action="{% url 'accounts:register' %}" class="space-y-6">
 {% csrf_token %}
@@ -51,10 +52,10 @@
 
 {% for field in form %}
 <div class="group">
-<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1" for="{{ field.id_for_label }}">{{ field.label }}</label>
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1 rtl:ml-0 rtl:mr-1" for="{{ field.id_for_label }}">{{ field.label }}</label>
 <div class="relative">
 {{ field }}
-<div class="absolute bottom-0 left-0 h-1 w-0 bg-primary group-focus-within:w-full transition-all duration-300 rounded-b-DEFAULT"></div>
+<div class="absolute bottom-0 left-0 rtl:left-auto rtl:right-0 h-1 w-0 bg-primary group-focus-within:w-full transition-all duration-300 rounded-b-DEFAULT"></div>
 </div>
 {% if field.errors %}
 <p class="text-error text-xs mt-1">{{ field.errors.0 }}</p>
@@ -64,19 +65,19 @@
 
 <div class="pt-4">
 <button class="w-full signature-texture text-on-primary font-bold py-4 rounded-DEFAULT shadow-md hover:shadow-lg hover:brightness-110 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2" type="submit">
-<span>Register</span>
-<span class="material-symbols-outlined text-sm">arrow_forward</span>
+<span>{% trans "Register" %}</span>
+<span class="material-symbols-outlined text-sm">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}arrow_back{% else %}arrow_forward{% endif %}</span>
 </button>
 </div>
 <div class="flex items-center justify-between mt-8 pt-8 border-t border-outline-variant/10">
-<p class="text-on-surface-variant text-sm">Already have an account?</p>
-<a class="text-primary font-bold text-sm hover:underline decoration-2 underline-offset-4 transition-all" href="{% url 'accounts:login' %}">Login</a>
+<p class="text-on-surface-variant text-sm">{% trans "Already have an account?" %}</p>
+<a class="text-primary font-bold text-sm hover:underline decoration-2 underline-offset-4 transition-all" href="{% url 'accounts:login' %}">{% trans "Login" %}</a>
 </div>
 </form>
 <!-- Scholar's Margin (Secondary Info) -->
-<div class="mt-12 hidden lg:block border-l-2 border-primary/10 pl-6">
-<p class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-tertiary mb-2">Notice</p>
-<p class="text-xs text-on-surface-variant leading-relaxed italic">By creating an account, you agree to our Terms of Service and acknowledge our Privacy Policy regarding data usage for personalized learning pathways.</p>
+<div class="mt-12 hidden lg:block border-l-2 rtl:border-l-0 rtl:border-r-2 border-primary/10 pl-6 rtl:pl-0 rtl:pr-6">
+<p class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-tertiary mb-2">{% trans "Notice" %}</p>
+<p class="text-xs text-on-surface-variant leading-relaxed italic">{% trans "By creating an account, you agree to our Terms of Service and acknowledge our Privacy Policy regarding data usage for personalized learning pathways." %}</p>
 </div>
 </div>
 </div>
