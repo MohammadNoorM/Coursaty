@@ -115,13 +115,15 @@
 </head>
 <body class="bg-surface font-body text-on-surface antialiased">
 <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm dark:shadow-none font-['Inter'] font-medium text-sm antialiased">
-<div class="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
-<a class="text-2xl font-black tracking-tighter text-blue-700 dark:text-blue-500" href="{% url 'courses:home' %}">Coursaty</a>
+<div class="flex items-center justify-between px-4 sm:px-6 py-3 max-w-7xl mx-auto">
+<a class="text-2xl font-black tracking-tighter text-blue-700 dark:text-blue-500 shrink-0" href="{% url 'courses:home' %}">Coursaty</a>
+<!-- Desktop Nav Links -->
 <div class="hidden md:flex items-center gap-8">
 <a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors" href="{% url 'courses:course_list' %}">{% trans "Courses" %}</a>
 <a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors" href="{% url 'blog:post_list' %}">{% trans "Blog" %}</a>
 </div>
-<div class="flex items-center gap-4">
+<!-- Desktop Right Actions -->
+<div class="hidden md:flex items-center gap-4">
 {% get_current_language as LANGUAGE_CODE %}
 <div class="relative">
   <button id="lang-btn" class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-all duration-200 active:scale-95 transform flex items-center gap-1">
@@ -143,12 +145,71 @@
 </div>
 <div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
 {% if user.is_authenticated %}
-<a href="{% url 'courses:dashboard' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium">{% trans "Hello," %} {{ user.username }}</a>
-<a href="{% url 'accounts:logout' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">{% trans "Logout" %}</a>
+<a href="{% url 'courses:dashboard' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium truncate max-w-[160px]">{% trans "Hello," %} {{ user.username }}</a>
+<a href="{% url 'accounts:logout' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform whitespace-nowrap">{% trans "Logout" %}</a>
 {% else %}
-<a href="{% url 'accounts:login' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium">{% trans "Login" %}</a>
-<a href="{% url 'accounts:register' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">{% trans "Register" %}</a>
+<a href="{% url 'accounts:login' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium whitespace-nowrap">{% trans "Login" %}</a>
+<a href="{% url 'accounts:register' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform whitespace-nowrap">{% trans "Register" %}</a>
 {% endif %}
+</div>
+<!-- Mobile Hamburger Button -->
+<button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors active:scale-95" aria-label="Toggle menu">
+  <span id="menu-icon-open" class="material-symbols-outlined text-slate-700 dark:text-slate-300">menu</span>
+  <span id="menu-icon-close" class="material-symbols-outlined text-slate-700 dark:text-slate-300 hidden">close</span>
+</button>
+</div>
+<!-- Mobile Menu Panel -->
+<div id="mobile-menu" class="hidden md:hidden border-t border-slate-200/50 dark:border-slate-800/50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl">
+<div class="flex flex-col px-4 py-4 space-y-1 max-w-7xl mx-auto">
+  <!-- Nav Links -->
+  <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="{% url 'courses:course_list' %}">
+    <span class="material-symbols-outlined text-[20px] text-slate-500">school</span>
+    {% trans "Courses" %}
+  </a>
+  <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="{% url 'blog:post_list' %}">
+    <span class="material-symbols-outlined text-[20px] text-slate-500">article</span>
+    {% trans "Blog" %}
+  </a>
+  <!-- Divider -->
+  <div class="h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
+  <!-- Language Switcher (Mobile) -->
+  {% get_current_language as LANGUAGE_CODE %}
+  <div class="flex items-center gap-2 px-4 py-2">
+    <span class="material-symbols-outlined text-[20px] text-slate-500">language</span>
+    <span class="text-sm font-medium text-slate-600 dark:text-slate-400">{% trans "Language" %}</span>
+  </div>
+  <form action="{% url 'set_language' %}" method="POST" class="flex gap-2 px-4 pb-2">
+    {% csrf_token %}
+    <input name="next" type="hidden" value="{{ request.path }}"/>
+    <button class="flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors {% if LANGUAGE_CODE == 'en' %}bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400{% endif %}" name="language" type="submit" value="en">
+      English
+    </button>
+    <button class="flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors {% if LANGUAGE_CODE == 'ar' %}bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400{% endif %}" name="language" type="submit" value="ar">
+      العربية
+    </button>
+  </form>
+  <!-- Divider -->
+  <div class="h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
+  <!-- Auth Links -->
+  {% if user.is_authenticated %}
+  <a href="{% url 'courses:dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium">
+    <span class="material-symbols-outlined text-[20px] text-slate-500">person</span>
+    {% trans "Hello," %} {{ user.username }}
+  </a>
+  <a href="{% url 'accounts:logout' %}" class="flex items-center justify-center gap-2 mx-4 mt-2 mb-1 px-6 py-3 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">
+    <span class="material-symbols-outlined text-[20px]">logout</span>
+    {% trans "Logout" %}
+  </a>
+  {% else %}
+  <a href="{% url 'accounts:login' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium">
+    <span class="material-symbols-outlined text-[20px] text-slate-500">login</span>
+    {% trans "Login" %}
+  </a>
+  <a href="{% url 'accounts:register' %}" class="flex items-center justify-center gap-2 mx-4 mt-2 mb-1 px-6 py-3 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">
+    <span class="material-symbols-outlined text-[20px]">person_add</span>
+    {% trans "Register" %}
+  </a>
+  {% endif %}
 </div>
 </div>
 </nav>
@@ -220,6 +281,7 @@
 </footer>
 {% block extra_js %}
 <script>
+// Language dropdown toggle
 const langBtn = document.getElementById('lang-btn');
 const langDropdown = document.getElementById('lang-dropdown');
 if (langBtn) {
@@ -229,6 +291,19 @@ if (langBtn) {
   });
   document.addEventListener('click', () => {
     langDropdown.classList.add('hidden');
+  });
+}
+
+// Mobile menu toggle
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+const menuIconOpen = document.getElementById('menu-icon-open');
+const menuIconClose = document.getElementById('menu-icon-close');
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener('click', () => {
+    const isHidden = mobileMenu.classList.toggle('hidden');
+    menuIconOpen.classList.toggle('hidden', !isHidden);
+    menuIconClose.classList.toggle('hidden', isHidden);
   });
 }
 </script>
