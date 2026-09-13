@@ -171,7 +171,7 @@ msgstr "يجب أن تكون مسجلاً لإضافة تعليق."
 
 #: .\courses\views.py:181
 msgid "That comment no longer exists."
-msgstr "??? ??????? ?? ??? ???????."
+msgstr "هذا التعليق لم يعد متوفرًا."
 
 #: .\payments\models.py:25
 msgid "Payment"
@@ -195,7 +195,7 @@ msgstr "تم إلغاء الدفع. يمكنك المحاولة مرة أخرى.
 
 #: .\payments\views.py:57
 msgid "Could not start the payment session. Please try again."
-msgstr "????? ??? ???? ?????. ???? ???????? ??? ????."
+msgstr "تعذّر بدء جلسة الدفع. يرجى المحاولة مرة أخرى."
 
 #: .\templates\accounts\login.html:3
 msgid "Login - Coursaty"
@@ -363,7 +363,7 @@ msgstr "مصمم بدقة"
 
 #: .\templates\base.html:182
 msgid "Language"
-msgstr "?????"
+msgstr "اللغة"
 
 #: .\templates\base_minimal.html:147
 msgid "Contact Support"
@@ -470,12 +470,12 @@ msgstr "تم التحديث"
 #, python-format
 msgid "%(counter)s rating"
 msgid_plural "%(counter)s ratings"
-msgstr[0] "%(counter)s ?????"
-msgstr[1] "????? ????"
-msgstr[2] "???????"
-msgstr[3] "%(counter)s ???????"
-msgstr[4] "%(counter)s ???????"
-msgstr[5] "%(counter)s ?????"
+msgstr[0] "%(counter)s تقييم"
+msgstr[1] "تقييم واحد"
+msgstr[2] "تقييمان"
+msgstr[3] "%(counter)s تقييمات"
+msgstr[4] "%(counter)s تقييمًا"
+msgstr[5] "%(counter)s تقييم"
 
 #: .\templates\courses\course_detail.html:29
 #, python-format
