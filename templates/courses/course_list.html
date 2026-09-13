@@ -38,12 +38,12 @@
 <section>
 <label class="text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant mb-4 block">{% trans "Categories" %}</label>
 <div class="space-y-3">
-<a href="{% url 'courses:course_list' %}?{% if search_query %}q={{ search_query }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="flex items-center gap-3 cursor-pointer group">
+<a href="{% url 'courses:course_list' %}?{% if search_query %}q={{ search_query|urlencode }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="flex items-center gap-3 cursor-pointer group">
 <input type="radio" name="category_filter" class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary/20" {% if not selected_category %}checked{% endif %} disabled/>
 <span class="text-sm {% if not selected_category %}text-primary font-bold{% else %}text-on-surface-variant group-hover:text-primary{% endif %} transition-colors">{% trans "All Categories" %}</span>
 </a>
 {% for category in categories %}
-<a href="{% url 'courses:course_list' %}?category={{ category.slug }}{% if search_query %}&q={{ search_query }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="flex items-center gap-3 cursor-pointer group">
+<a href="{% url 'courses:course_list' %}?category={{ category.slug }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="flex items-center gap-3 cursor-pointer group">
 <input type="radio" name="category_filter" class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary/20" {% if selected_category == category.slug %}checked{% endif %} disabled/>
 <span class="text-sm {% if selected_category == category.slug %}text-primary font-bold{% else %}text-on-surface-variant group-hover:text-primary{% endif %} transition-colors">{{ category.name }}</span>
 </a>
@@ -144,7 +144,7 @@
 {% if page_obj.has_other_pages %}
 <nav class="mt-16 flex items-center justify-center gap-2">
 {% if page_obj.has_previous %}
-<a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
 <span class="material-symbols-outlined" data-icon="chevron_left">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}chevron_right{% else %}chevron_left{% endif %}</span>
 </a>
 {% else %}
@@ -159,12 +159,12 @@
     {% elif num == page_obj.paginator.ELLIPSIS %}
     <span class="px-2 text-on-surface-variant font-bold">...</span>
     {% else %}
-    <a href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">{{ num }}</a>
+    <a href="?page={{ num }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">{{ num }}</a>
     {% endif %}
 {% endfor %}
 
 {% if page_obj.has_next %}
-<a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if min_rating %}&rating={{ min_rating }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
 <span class="material-symbols-outlined" data-icon="chevron_right">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}chevron_left{% else %}chevron_right{% endif %}</span>
 </a>
 {% else %}
