@@ -146,7 +146,10 @@
 <div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
 {% if user.is_authenticated %}
 <a href="{% url 'courses:dashboard' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium truncate max-w-[160px]">{% trans "Hello," %} {{ user.username }}</a>
-<a href="{% url 'accounts:logout' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform whitespace-nowrap">{% trans "Logout" %}</a>
+<form method="POST" action="{% url 'accounts:logout' %}" class="inline">
+    {% csrf_token %}
+    <button type="submit" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform whitespace-nowrap">{% trans "Logout" %}</button>
+</form>
 {% else %}
 <a href="{% url 'accounts:login' %}" class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors font-medium whitespace-nowrap">{% trans "Login" %}</a>
 <a href="{% url 'accounts:register' %}" class="px-6 py-2 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform whitespace-nowrap">{% trans "Register" %}</a>
@@ -196,10 +199,13 @@
     <span class="material-symbols-outlined text-[20px] text-slate-500">person</span>
     {% trans "Hello," %} {{ user.username }}
   </a>
-  <a href="{% url 'accounts:logout' %}" class="flex items-center justify-center gap-2 mx-4 mt-2 mb-1 px-6 py-3 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">
-    <span class="material-symbols-outlined text-[20px]">logout</span>
-    {% trans "Logout" %}
-  </a>
+  <form method="POST" action="{% url 'accounts:logout' %}" class="mx-4 mt-2 mb-1">
+    {% csrf_token %}
+    <button type="submit" class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full primary-gradient text-white font-bold shadow-lg shadow-blue-500/20 active:scale-95 transform transition-transform">
+      <span class="material-symbols-outlined text-[20px]">logout</span>
+      {% trans "Logout" %}
+    </button>
+  </form>
   {% else %}
   <a href="{% url 'accounts:login' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium">
     <span class="material-symbols-outlined text-[20px] text-slate-500">login</span>
