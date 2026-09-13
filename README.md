@@ -1,158 +1,180 @@
 # Coursaty
 
-## Project Overview
-Coursaty is an online learning platform that allows users to browse, purchase, and watch video courses. It provides a comprehensive ecosystem for both students and administrators.
+Coursaty is a bilingual (English/Arabic) e-learning platform built with Django.
+Students browse video courses, purchase them through Stripe Checkout, watch
+lessons, leave threaded comments, and manage a wishlist and a personal
+dashboard. It also includes an integrated blog and a fully translated admin
+panel.
+
+**Live demo:** <https://coursaty-9qzy.onrender.com>
 
 ## Features
-- **Course Browsing**: Explore a wide variety of available courses.
-- **Purchasing**: Secure course purchases through Stripe integration.
-- **Video Lessons**: Access and watch video content for enrolled courses.
-- **Comments**: Engage with instructors and other students via lesson comments.
-- **Wishlist**: Save interested courses for later.
-- **Blog**: Read articles and updates related to the platform.
-- **Dashboard**: A personalized student dashboard to track enrolled courses and progress.
-- **Admin Panel**: Comprehensive administrative interface for managing courses, users, and content.
-- **Bilingual Support**: Full support for both Arabic and English languages.
+
+- **Course catalog** - categories, search, rating and price filters, pagination
+- **Secure payments** - Stripe Checkout with webhook-driven enrollment and
+  server-side verification of every payment
+- **Video lessons** - Cloudinary-hosted video, section/lesson structure, and
+  lesson-level access control (enrollment required)
+- **Community** - threaded comments on lessons
+- **Wishlist and student dashboard**
+- **Blog** - registered users can publish posts; authors can edit and delete
+  their own
+- **Bilingual UI (EN/AR)** - full RTL layout support, translated models via
+  django-modeltranslation
+- **Admin panel** - manages courses, sections, lessons, payments, ratings,
+  comments and wishlists with translated content fields
 
 ## Tech Stack
-- **Backend Framework**: Django
-- **Database**: PostgreSQL (hosted on Neon)
-- **Payments**: Stripe
-- **Media Storage**: Cloudinary
-- **Styling**: Tailwind CSS
-- **Deployment**: Render
 
-## Local Development Setup
-
-To get this project running locally on your machine, follow these steps:
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd Coursaty
-   ```
-
-2. **Create and activate a virtual environment:**
-   ```bash
-   python -m venv venv
-   # On Windows
-   venv\Scripts\activate
-   # On macOS/Linux
-   source venv/bin/activate
-   ```
-
-3. **Install the dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Set up environment variables:**
-   Create a `.env` file in the project root and add the required variables (see the Environment Variables section below).
-
-5. **Apply database migrations:**
-   ```bash
-   python manage.py migrate
-   ```
-
-6. **Load initial data (optional but recommended):**
-   ```bash
-   python manage.py loaddata data.json
-   ```
-
-7. **Run the development server:**
-   ```bash
-   python manage.py runserver
-   ```
-   You can now access the platform at `http://127.0.0.1:8000/`.
-
-## Environment Variables
-
-To run this project, you will need to add the following environment variables to your `.env` file:
-
-- `SECRET_KEY`: Django secret key.
-- `DEBUG`: Set to `True` for development, `False` for production.
-- `DATABASE_URL`: Connection string for your PostgreSQL database (Neon).
-- `STRIPE_PUBLIC_KEY`: Your Stripe publishable key.
-- `STRIPE_SECRET_KEY`: Your Stripe secret key.
-- `STRIPE_WEBHOOK_SECRET`: Your Stripe webhook signing secret.
-- `CLOUDINARY_URL`: Your Cloudinary connection URL for media storage.
-
-## Deployment
-
-The application is configured to be deployed on **Render**. It uses **Neon** for the highly available PostgreSQL database and **Cloudinary** for scalable media and file storage.
-
-## Live Demo
-
-Check out the live application here: [https://coursaty-9qzy.onrender.com](https://coursaty-9qzy.onrender.com)
-# Coursaty
-
-Coursaty is an open-source E-Learning and Online Course platform built with Django. It provides a complete solution for course management, user registration, payments, and an integrated blog.
-
-## Features
-
-- **Courses Management**: Organized by categories, with rich content and lessons.
-- **User Accounts**: Registration, authentication, profile management, and enrolled courses dashboard.
-- **Payments**: Integrated payment gateway for purchasing premium courses.
-- **Blog**: Built-in blogging system to share articles, updates, and news.
-- **Wishlist**: Users can add courses to their wishlist for later.
-- **Multilingual Support**: Ready for localization.
+| Layer | Choice |
+| --- | --- |
+| Backend | Django 5.2 |
+| Database | PostgreSQL (hosted on Neon) |
+| Payments | Stripe Checkout + webhooks |
+| Media storage | Cloudinary (chunked video uploads) |
+| Styling | Tailwind CSS |
+| Server | gunicorn + WhiteNoise, deployed on Render |
 
 ## Project Structure
 
-This Django project consists of several cohesive applications:
+```
+accounts/    Custom user model, registration, login/logout
+blog/        Blog posts (create/edit/delete, author permissions)
+courses/     Categories, courses, sections, lessons, enrollments,
+             ratings, comments, wishlist
+payments/    Stripe checkout sessions, webhook handling, payments
+config/      Project settings, URLs, WSGI/ASGI entry points
+templates/   Shared templates (per-app subdirectories)
+locale/      Arabic translations (django.po / django.mo)
+```
 
-- `accounts/`: Handles user authentication, registration, and profiles.
-- `blog/`: Contains the blog posts functionality.
-- `courses/`: The core e-learning application containing models for Categories, Courses, Lessons, and Wishlist.
-- `payments/`: Manages transactions and payment integration for course enrollments.
-- `config/`: Main Django configuration and settings.
-- `templates/`: HTML templates for the frontend, utilizing a customized layout.
+## Local Setup
 
-## Prerequisites
-
-- Python 3.8+
-- pip (Python package installer)
-- virtualenv (optional but recommended)
-
-## Installation & Local Setup
+Requirements: Python 3.10+ and a PostgreSQL database (local or hosted).
 
 1. **Clone the repository:**
+
    ```bash
    git clone <repository-url>
    cd Coursaty
    ```
 
 2. **Create and activate a virtual environment:**
+
    ```bash
-   python -m venv venv
-   # On Windows
-   .\venv\Scripts\activate
-   # On macOS/Linux
-   source venv/bin/activate
+   python -m venv .venv
+   # Windows
+   .venv\Scripts\activate
+   # macOS / Linux
+   source .venv/bin/activate
    ```
 
-3. **Install the dependencies:**
+3. **Install dependencies:**
+
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Apply database migrations:**
+4. **Create a `.env` file** in the project root with the variables listed in
+   the next section.
+
+5. **Apply database migrations:**
+
    ```bash
    python manage.py migrate
    ```
 
-5. **Run the development server:**
+6. **Create an admin user (optional, for content management):**
+
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+7. **Run the development server:**
+
    ```bash
    python manage.py runserver
    ```
 
-6. **Access the application:**
-   Open your browser and navigate to `http://127.0.0.1:8000/`.
+   The site is now available at <http://127.0.0.1:8000/>.
 
-## Contributing
+## Environment Variables
 
-Contributions are welcome! Feel free to open issues or submit pull requests.
+All variables below are read by `python-decouple` from a `.env` file (or real
+environment variables, as on Render).
 
-## License
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `SECRET_KEY` | yes | Django secret key |
+| `DEBUG` | yes | `True` for development, `False` in production |
+| `ALLOWED_HOSTS` | no | Comma-separated; defaults to `127.0.0.1,localhost` |
+| `DATABASE_URL` | one of | PostgreSQL URL (e.g. Neon). Alternative: set the five `DB_*` variables below |
+| `DB_NAME` / `DB_USER` / `DB_PASSWORD` / `DB_HOST` / `DB_PORT` | alternative | Used only when `DATABASE_URL` is not set |
+| `STRIPE_SECRET_KEY` | yes | Stripe API secret key |
+| `STRIPE_PUBLISHABLE_KEY` | yes | Stripe publishable key |
+| `STRIPE_WEBHOOK_SECRET` | yes | Signing secret of your Stripe webhook endpoint |
+| `CLOUDINARY_CLOUD_NAME` | yes | Cloudinary credentials for media storage |
+| `CLOUDINARY_API_KEY` | yes | |
+| `CLOUDINARY_API_SECRET` | yes | |
 
-This project is licensed under the MIT License.
+## Stripe Webhook Configuration
+
+The payment flow relies on a Stripe webhook to enroll students after a
+successful checkout:
+
+- **Endpoint URL:** `https://<your-host>/payments/webhook/`
+- **Events:** `checkout.session.completed` and `checkout.session.expired`
+
+For local development, forward events with the Stripe CLI:
+
+```bash
+stripe listen --forward-to localhost:8000/payments/webhook/
+```
+
+## Running the Tests
+
+```bash
+python manage.py test
+```
+
+The suite covers the payment flow (checkout, webhook signature verification,
+enrollment idempotency, success-page verification), accounts (registration,
+login redirect validation, POST-only logout), courses (lesson access control,
+comments, wishlist) and the blog. Note that Django creates and destroys a
+`test_*` database on the configured database server while running.
+
+## Internationalization
+
+The UI and admin are translated into Arabic (see `locale/ar`). To update the
+translations after changing strings:
+
+```bash
+django-admin makemessages -l ar
+# ... translate in locale/ar/LC_MESSAGES/django.po ...
+django-admin compilemessages
+```
+
+Tip: name your virtual environment `.venv` (with a leading dot) so
+`makemessages` does not extract strings from `site-packages`. The compiled
+`django.mo` is committed because the build server has no gettext tooling.
+
+## Deployment (Render)
+
+The app is deployed on Render with gunicorn and WhiteNoise:
+
+- **Build command:** `./build.sh` (installs dependencies, collects static
+  files, applies migrations)
+- **Start command:** from the `Procfile` (`gunicorn config.wsgi:application`)
+- Environment variables are configured in the Render dashboard; they are the
+  same ones listed above.
+
+## Notes and Known Limitations
+
+- Lesson durations are set in the admin rather than extracted automatically
+  (the previous automatic extraction required downloading and re-encoding
+  every video on save).
+- Tailwind CSS is currently loaded via the CDN play script; a proper build
+  pipeline is planned.
+- Blog *content* is single-language; only the UI, courses and admin content
+  are translatable.
+- There is no password-reset flow yet (no email backend is configured).
