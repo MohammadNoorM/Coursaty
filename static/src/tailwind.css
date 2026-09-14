@@ -1,0 +1,88 @@
+/*
+ * Source stylesheet for the project. Compiled by scripts/build_css.py into
+ * static/css/tailwind.css (which is git-ignored). Run with --watch during
+ * development.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Bordered form controls (pages extending base.html). */
+  input[type='text'],
+  input[type='password'],
+  input[type='email'],
+  input[type='number'],
+  input[type='url'],
+  input[type='date'],
+  input[type='datetime-local'],
+  input[type='month'],
+  input[type='search'],
+  input[type='tel'],
+  input[type='time'],
+  input[type='week'],
+  textarea,
+  select {
+    @apply w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:outline-none transition-all duration-200 dark:bg-slate-900/50 dark:border-slate-800 dark:text-slate-200;
+  }
+
+  /* Underlined form controls (auth/payment pages extending base_minimal.html).
+   * NOTE: Tailwind tree-shakes @layer rules whose selector classes are not
+   * present in any content file - the page-minimal class is applied to the
+   * <body> in base_minimal.html and must stay there (guarded by tests). */
+  .page-minimal input[type='text'],
+  .page-minimal input[type='password'],
+  .page-minimal input[type='email'],
+  .page-minimal input[type='number'],
+  .page-minimal input[type='url'],
+  .page-minimal input[type='date'],
+  .page-minimal input[type='datetime-local'],
+  .page-minimal input[type='month'],
+  .page-minimal input[type='search'],
+  .page-minimal input[type='tel'],
+  .page-minimal input[type='time'],
+  .page-minimal input[type='week'],
+  .page-minimal textarea,
+  .page-minimal select {
+    @apply w-full bg-surface-container-high border-0 border-b border-outline-variant/30 rounded-t px-4 py-3 text-on-surface focus:ring-0 focus:outline-none transition-colors focus:bg-surface-container-highest;
+  }
+}
+
+/*
+ * Design-system classes. These previously lived as inline <style> blocks in
+ * the two base templates (and were consequently broken wherever a class was
+ * used in a template that did not define it - e.g. ghost-border on the
+ * dashboard). They are intentionally unlayered so utility classes can still
+ * be combined with them as before.
+ */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+
+.glass-header {
+  background: rgba(250, 248, 255, 0.7);
+  backdrop-filter: blur(20px);
+}
+
+.glass-panel {
+  background: rgba(250, 248, 255, 0.7);
+  backdrop-filter: blur(24px);
+}
+
+.primary-gradient {
+  background: linear-gradient(135deg, #004ac6 0%, #2563eb 100%);
+}
+
+.signature-texture {
+  background: linear-gradient(135deg, #004ac6 0%, #2563eb 100%);
+}
+
+.ghost-border {
+  outline: 1px solid rgba(195, 198, 215, 0.15);
+}
+
+/* Soft ambient shadow used by the lesson player and active lesson item. */
+.editorial-shadow {
+  box-shadow: 0 24px 48px -12px rgba(25, 27, 35, 0.08);
+}

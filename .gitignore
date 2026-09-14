@@ -21,7 +21,8 @@ venv.bak/
 # Uploaded Media and Static Files
 /media/
 /staticfiles/
-/static/
+/static/css/
+/.tailwind/
 data.json
 
 
