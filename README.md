@@ -46,6 +46,8 @@ payments/    Stripe checkout sessions, webhook handling, payments
 config/      Project settings, URLs, WSGI/ASGI entry points
 templates/   Shared templates (per-app subdirectories)
 locale/      Arabic translations (django.po / django.mo)
+scripts/     Build tooling (Tailwind CSS compile)
+static/      CSS source (static/src) and build output (static/css)
 ```
 
 ## Local Setup
@@ -75,28 +77,67 @@ Requirements: Python 3.10+ and a PostgreSQL database (local or hosted).
    pip install -r requirements.txt
    ```
 
-4. **Create a `.env` file** in the project root with the variables listed in
+4. **Build the frontend stylesheet:**
+
+   ```bash
+   python scripts/build_css.py
+   ```
+
+   This downloads the pinned Tailwind CSS CLI (see [Frontend Build](#frontend-build-tailwind-css))
+   and compiles `static/css/tailwind.css`. The site is unstyled until this has
+   run once.
+
+5. **Create a `.env` file** in the project root with the variables listed in
    the next section.
 
-5. **Apply database migrations:**
+6. **Apply database migrations:**
 
    ```bash
    python manage.py migrate
    ```
 
-6. **Create an admin user (optional, for content management):**
+7. **Create an admin user (optional, for content management):**
 
    ```bash
    python manage.py createsuperuser
    ```
 
-7. **Run the development server:**
+8. **Run the development server:**
 
    ```bash
    python manage.py runserver
    ```
 
    The site is now available at <http://127.0.0.1:8000/>.
+
+## Frontend Build (Tailwind CSS)
+
+Styling is compiled ahead of time - there is no runtime CDN script.
+
+- `static/src/tailwind.css` is the source stylesheet (`@tailwind`
+  directives, the base form-control styles and the custom design-system
+  classes).
+- `tailwind.config.js` holds the theme (design tokens, fonts) and the
+  content globs (`templates/**/*.html` and `blog/forms.py`, whose widgets
+  set Tailwind classes).
+- `scripts/build_css.py` downloads the official Tailwind v3.4.17 standalone
+  CLI for your platform into `.tailwind/` (git-ignored), verifies it
+  against the SHA-256 checksums published on the release, and compiles the
+  stylesheet to `static/css/tailwind.css` (git-ignored build output). It
+  uses only the Python standard library - no Node.js is required.
+
+During development, keep a watcher running so changes to templates or the
+source CSS rebuild automatically:
+
+```bash
+python scripts/build_css.py --watch
+```
+
+One Tailwind v3 detail worth knowing: rules inside `@layer` are tree-shaken
+when their selector classes do not appear in any content file. The
+`page-minimal` class (which scopes the underlined form-control style to the
+auth/payment pages) must therefore stay on the `<body>` of
+`base_minimal.html`; a test guards this.
 
 ## Environment Variables
 
@@ -162,8 +203,10 @@ Tip: name your virtual environment `.venv` (with a leading dot) so
 
 The app is deployed on Render with gunicorn and WhiteNoise:
 
-- **Build command:** `./build.sh` (installs dependencies, collects static
-  files, applies migrations)
+- **Build command:** `./build.sh` (installs dependencies, compiles the
+  Tailwind stylesheet, collects static files, applies migrations). The
+  build downloads the pinned Tailwind CLI binary (~40 MB) from the
+  GitHub release and verifies its checksum before use.
 - **Start command:** from the `Procfile` (`gunicorn config.wsgi:application`)
 - Environment variables are configured in the Render dashboard; they are the
   same ones listed above.
@@ -173,8 +216,6 @@ The app is deployed on Render with gunicorn and WhiteNoise:
 - Lesson durations are set in the admin rather than extracted automatically
   (the previous automatic extraction required downloading and re-encoding
   every video on save).
-- Tailwind CSS is currently loaded via the CDN play script; a proper build
-  pipeline is planned.
 - Blog *content* is single-language; only the UI, courses and admin content
   are translatable.
 - There is no password-reset flow yet (no email backend is configured).
