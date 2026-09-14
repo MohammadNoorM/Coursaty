@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Avg
@@ -171,7 +172,14 @@ def add_comment(request, lesson_id):
         body = request.POST.get('body', '').strip()
         parent_id = request.POST.get('parent_id')
         if body:
-            parent = Comment.objects.get(id=parent_id) if parent_id else None
+            parent = None
+            if parent_id:
+                try:
+                    # Replies must belong to the same lesson
+                    parent = Comment.objects.get(id=parent_id, lesson=lesson)
+                except (Comment.DoesNotExist, ValueError):
+                    messages.error(request, _('That comment no longer exists.'))
+                    return redirect('courses:lesson', course_slug=course.slug, lesson_slug=lesson.slug)
             Comment.objects.create(
                 user=request.user,
                 lesson=lesson,
@@ -181,6 +189,7 @@ def add_comment(request, lesson_id):
     return redirect('courses:lesson', course_slug=course.slug, lesson_slug=lesson.slug)
 
 @login_required
+@require_POST
 def toggle_wishlist(request, course_slug):
     course = get_object_or_404(Course, slug=course_slug)
     wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, course=course)

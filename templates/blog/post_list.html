@@ -57,7 +57,7 @@
 {% if page_obj.has_other_pages %}
 <nav class="flex justify-center items-center gap-2 mt-16 pb-8">
 {% if page_obj.has_previous %}
-<a href="?page={{ page_obj.previous_page_number }}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<a href="?page={{ page_obj.previous_page_number }}{% if showing_mine %}&mine=true{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
 <span class="material-symbols-outlined" data-icon="chevron_left">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}chevron_right{% else %}chevron_left{% endif %}</span>
 </a>
 {% else %}
@@ -72,12 +72,12 @@
     {% elif num == page_obj.paginator.ELLIPSIS %}
     <span class="px-2 text-on-surface-variant font-bold">...</span>
     {% else %}
-    <a href="?page={{ num }}" class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">{{ num }}</a>
+    <a href="?page={{ num }}{% if showing_mine %}&mine=true{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">{{ num }}</a>
     {% endif %}
 {% endfor %}
 
 {% if page_obj.has_next %}
-<a href="?page={{ page_obj.next_page_number }}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<a href="?page={{ page_obj.next_page_number }}{% if showing_mine %}&mine=true{% endif %}" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
 <span class="material-symbols-outlined" data-icon="chevron_right">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "ar" %}chevron_left{% else %}chevron_right{% endif %}</span>
 </a>
 {% else %}

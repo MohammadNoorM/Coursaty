@@ -95,32 +95,6 @@ class Lesson(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.video and not self.duration:
-            try:
-                import tempfile
-                import requests
-                from moviepy.video.io.VideoFileClip import VideoFileClip
-                from datetime import timedelta
-
-                video_url = self.video.url
-                response = requests.get(video_url)
-                with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as tmp:
-                    tmp.write(response.content)
-                    tmp_path = tmp.name
-
-                clip = VideoFileClip(tmp_path)
-                self.duration = timedelta(seconds=int(clip.duration))
-                clip.close()
-
-                import os
-                os.unlink(tmp_path)
-
-                Lesson.objects.filter(pk=self.pk).update(duration=self.duration)
-            except Exception as e:
-                print(f'Could not extract duration: {e}')
-
     class Meta:
         verbose_name = _('Lesson')
         verbose_name_plural = _('Lessons')

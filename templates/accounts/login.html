@@ -21,6 +21,7 @@
 </header>
 <form method="POST" action="{% url 'accounts:login' %}" class="space-y-6">
 {% csrf_token %}
+{% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
 
 {% if form.non_field_errors %}
 <div class="p-3 bg-error/10 border border-error/30 rounded text-error text-sm mb-4">

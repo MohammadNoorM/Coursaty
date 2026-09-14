@@ -1,6 +1,6 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
-from .models import Category, Course, Section, Lesson, Enrollment, Rating, Comment
+from .models import Category, Course, Section, Lesson, Enrollment, Rating, Comment, Wishlist
 
 
 @admin.register(Category)
@@ -57,3 +57,8 @@ class RatingAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('user', 'lesson', 'created_at')
+
+
+@admin.register(Wishlist)
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ('user', 'course', 'added_at')
