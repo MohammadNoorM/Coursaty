@@ -172,6 +172,28 @@ For local development, forward events with the Stripe CLI:
 stripe listen --forward-to localhost:8000/payments/webhook/
 ```
 
+## Seeding Demo Data
+
+`seed_demo` wipes the database and creates a full bilingual demo dataset
+(users, categories, 63 courses with lessons, activity, and blog posts). Lesson
+videos reuse the files already hosted on Cloudinary; thumbnails and blog
+covers upload from a local images folder:
+
+```bash
+python manage.py seed_demo --images /path/to/images
+```
+
+Useful flags:
+
+- `--admin-password SECRET` - set the admin password instead of a generated
+  random one (which is printed once at the end)
+- `--cleanup-media` - delete old images under `courses/thumbnails/` and
+  `courses/blog/` on Cloudinary before seeding (videos are never touched)
+- `--skip-wipe` - seed on top of existing data (debugging only)
+
+Demo students and instructors share the password printed by the command, so
+portfolio visitors can be invited to "log in as a student". The command is
+deterministic (fixed RNG seed) and safe to re-run.
 ## Running the Tests
 
 ```bash
